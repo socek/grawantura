@@ -17,6 +17,7 @@ onMounted(() => {
 
   // console.log(route.params)
 })
+
 </script>
 
 <template>
