@@ -1,5 +1,5 @@
 <script setup>
-  import { supabase } from '../models/supabase'
+  import { supabase } from '@/models/supabase'
   import { onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
   const route = useRoute()

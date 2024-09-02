@@ -1,8 +1,8 @@
 <script setup>
   import { onMounted, ref, computed } from 'vue'
   import { useStore } from 'vuex'
-  import { Status } from '../models/consts'
-  import { supabase } from '../models/supabase'
+  import { Status } from '@/models/consts'
+  import { supabase } from '@/models/supabase'
   import CreateGame from './widgets/CreateGame.vue'
 
   const store = useStore()

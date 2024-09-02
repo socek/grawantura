@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue'
-  import { supabase } from '../../models/supabase'
+  import { supabase } from '@/models/supabase'
   import { useStore } from 'vuex'
 
   const store = useStore()
