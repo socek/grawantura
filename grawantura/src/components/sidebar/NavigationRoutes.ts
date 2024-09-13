@@ -19,6 +19,13 @@ export default {
       },
     },
     {
+      name: 'games',
+      displayName: 'menu.games',
+      meta: {
+        icon: 'vuestic-iconset-dashboard',
+      },
+    },
+    {
       name: 'users',
       displayName: 'menu.users',
       meta: {

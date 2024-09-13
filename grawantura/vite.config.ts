@@ -15,4 +15,10 @@ export default defineConfig({
       include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**'),
     }),
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '#root': resolve(__dirname)
+    }
+  },
 })

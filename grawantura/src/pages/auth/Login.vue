@@ -31,24 +31,18 @@
       </VaInput>
     </VaValue>
 
-    <div class="auth-layout__options flex flex-col sm:flex-row items-start sm:items-center justify-between">
-      <VaCheckbox v-model="formData.keepLoggedIn" class="mb-2 sm:mb-0" label="Keep me signed in on this device" />
-      <RouterLink :to="{ name: 'recover-password' }" class="mt-2 sm:mt-0 sm:ml-1 font-semibold text-primary">
-        Forgot password?
-      </RouterLink>
-    </div>
-
     <div class="flex justify-center mt-4">
       <VaButton class="w-full" @click="submit"> Login</VaButton>
     </div>
   </VaForm>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useForm, useToast } from 'vuestic-ui'
 import { validators } from '../../services/utils'
+import { supabase } from '@/stores/supabase'
 
 const { validate } = useForm('form')
 const { push } = useRouter()
@@ -57,13 +51,26 @@ const { init } = useToast()
 const formData = reactive({
   email: '',
   password: '',
-  keepLoggedIn: false,
 })
 
-const submit = () => {
-  if (validate()) {
-    init({ message: "You've successfully logged in", color: 'success' })
+const handleLogin = async () => {
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
+    })
+    if (error) throw error
     push({ name: 'dashboard' })
+  } catch (error) {
+    if (error instanceof Error) {
+      init({"message": error.message, color: "#FF0000"})
+    }
+  }
+}
+
+const submit = async () => {
+  if (validate()) {
+    handleLogin()
   }
 }
 </script>

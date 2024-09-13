@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/admin/dashboard/Dashboard.vue'),
       },
       {
+        name: 'games',
+        path: 'games',
+        component: () => import('../pages/admin/games/Games.vue'),
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),
