@@ -23,7 +23,7 @@ const columns = defineVaDataTableColumns([
   <VaCard>
     <VaCardTitle class="flex items-start justify-between">
       <h1 class="card-title text-secondary font-bold uppercase">Games</h1>
-      <VaButton preset="primary" size="small" to="/projects">View all games</VaButton>
+      <VaButton preset="primary" size="small" to="/games">View all games</VaButton>
     </VaCardTitle>
     <VaCardContent>
       <div v-if="gamesStore.items.length > 0">

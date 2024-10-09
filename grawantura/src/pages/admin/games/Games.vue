@@ -3,25 +3,27 @@
   import { ref } from 'vue'
   import createGameForm from '@/pages/admin/games/widgets/createGame.vue'
 
-  const createGameFormRef = ref(null)
-
-  const showAddGame = () => {
-    createGameFormRef.value.showDialog()
-  }
+  const nameFilter = ref("")
 </script>
 
 <template>
-  <h1 class="page-title font-bold">Games</h1>
+  <div>
+    <h1 class="page-title font-bold">Games</h1>
+    <VaCard>
+      <VaCardContent>
+        <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
+          <div class="flex flex-col md:flex-row gap-2 justify-start">
+            <VaInput v-model="nameFilter" placeholder="Search">
+              <template #prependInner>
+                <VaIcon name="search" color="secondary" size="small" />
+              </template>
+            </VaInput>
+          </div>
+          <createGameForm  ref="createGameFormRef" />
+        </div>
 
-  <VaCard>
-    <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <VaButton @click="showAddGame">Add Game</VaButton>
-      </div>
-
-      <GamesTable class="w-full md:w-1/2" />
-    </VaCardContent>
-  </VaCard>
-
-  <createGameForm  ref="createGameFormRef" />
+        <GamesTable class="w-full md:w-1/2" :nameFilter="nameFilter" />
+      </VaCardContent>
+    </VaCard>
+  </div>
 </template>

@@ -5,7 +5,12 @@ import { useVModel } from '@vueuse/core'
 
 import { Status } from '@/stores/supabase'
 import useGamesStore from '@/stores/games'
+
+import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
+
 const gamesStore = useGamesStore()
+
+const props = defineProps(['nameFilter'])
 
 onMounted(async () => {
   await gamesStore.fetch()
@@ -17,16 +22,16 @@ const isLoading = computed(() => {
 
 
 const columns = [
-  { label: 'Full Name', key: 'fullname', sortable: true },
-  // { label: 'Email', key: 'email', sortable: true },
-  // { label: 'Username', key: 'username', sortable: true },
-  // { label: 'Role', key: 'role', sortable: true },
-  // { label: 'Projects', key: 'projects', sortable: true },
-  // { label: ' ', key: 'actions', align: 'right' },
+  { label: 'Name', key: 'name', sortable: true },
+  { label: ' ', key: 'actions', align: 'right' },
 ]
 
 const perPage = ref(10)
-const games = computed(() => gamesStore.items)
+const games = computed(() => {
+  return gamesStore.items.filter(item => {
+    return item.name.toLowerCase().indexOf(props.nameFilter.toLowerCase()) > -1
+  })
+})
 const pageNumber = ref(1)
 const totalPages = computed(() => 1)
 
@@ -39,10 +44,14 @@ const totalPages = computed(() => 1)
       :items="games"
       :loading="isLoading"
     >
-      <template #cell(fullname)="{ rowData }">
+      <template #cell(name)="{ rowData }">
         <div class="flex items-center gap-2 max-w-[230px] ellipsis">
           {{ rowData.name }}
         </div>
+      </template>
+
+      <template #cell(actions)="{ rowData }">
+        <editGameForm :item_id="rowData.id" />
       </template>
 
     </VaDataTable>
