@@ -74,7 +74,7 @@
 </script>
 
 <template>
-  <div class="flex gap-2 justify-end">
+  <div >
     <VaButton
       preset="primary"
       size="small"

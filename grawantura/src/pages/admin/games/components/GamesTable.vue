@@ -7,6 +7,7 @@ import { Status } from '@/stores/supabase'
 import useGamesStore from '@/stores/games'
 
 import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
+import deleteGameForm from '@/pages/admin/games/widgets/deleteGame.vue'
 
 const gamesStore = useGamesStore()
 
@@ -51,7 +52,10 @@ const totalPages = computed(() => 1)
       </template>
 
       <template #cell(actions)="{ rowData }">
-        <editGameForm :item_id="rowData.id" />
+        <div class="flex gap-2 justify-end">
+          <editGameForm :item_id="rowData.id" />
+          <deleteGameForm :item_id="rowData.id" :name="rowData.name" />
+        </div>
       </template>
 
     </VaDataTable>
