@@ -1,0 +1,3 @@
+#!/bin/bash
+source /home/user/.cache/pypoetry/virtualenvs/grawantura-MATOk_fk-py3.13/bin/activate
+

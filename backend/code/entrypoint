@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+if [ "$1" == "webapi" ] ; then
+    poetry run uvicorn grawantura.webapp:webapp --host 0.0.0.0 --port 8000 --reload
+else
+    /bin/sh -c $*
+fi
