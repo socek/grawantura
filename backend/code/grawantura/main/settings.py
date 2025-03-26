@@ -1,15 +1,16 @@
 from decouple import config
+from qq.plugins.settings import TESTS_KEY
 from qq.plugins.types import Settings
 
 
 def default() -> Settings:
     settings = Settings()
-    settings["psql"] = psql()
+    settings["sql"] = sql()
     settings["logging"] = logging()
     return settings
 
 
-def psql() -> Settings:
+def sql() -> Settings:
     name = config("POSTGRES_DB")
     user = config("POSTGRES_USER")
     password = config("POSTGRES_PASSWORD")
@@ -25,7 +26,7 @@ def psql() -> Settings:
     }
 
 
-def logging():
+def logging() -> Settings:
     return {
         "version": 1,
         "disable_existing_loggers": True,
@@ -61,5 +62,33 @@ def logging():
                 "handlers": ["console"],
                 "qualname": "fajabot",
             },
+        },
+    }
+
+
+# --------------------
+# Tests settings below
+# --------------------
+
+
+def tests() -> Settings:
+    settings = default()
+    settings[TESTS_KEY] = True
+    settings["sql"] = test_sql()
+    return settings
+
+
+def test_sql() -> Settings:
+    name = config("POSTGRES_DB") + "_tests"
+    user = config("POSTGRES_USER")
+    password = config("POSTGRES_PASSWORD")
+    host = config("POSTGRES_HOST")
+    return {
+        "url": f"postgresql+asyncpg://{user}:{password}@{host}:5432/{name}",
+        "options": {
+            "pool_recycle": config("DB_POOL_RECYCLE", 3600, cast=int),
+            "pool_pre_ping": config("DB_PRE_PING", True, cast=bool),
+            "pool_size": config("DB_SIZE", 40, cast=int),
+            "max_overflow": config("DB_OVERFLOW", 20, cast=int),
         },
     }

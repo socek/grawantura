@@ -1,1 +1,6 @@
 .env
+*.pyc
+pyrightconfig.json
+node_modules
+.coverage
+*/__pycache__/*
