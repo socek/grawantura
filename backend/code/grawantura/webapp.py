@@ -1,25 +1,17 @@
-from datetime import datetime
-
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse
 from starlette.routing import Route
 
+from grawantura.games.web import games
+from grawantura.home.web import home
 from grawantura.main.globals import app
 
-
-async def home(request):
-    return JSONResponse(
-        {
-            "status": "running",
-            "time": datetime.now().isoformat(),
-        }
-    )
-
+routes = [
+    Route("/", home),
+    Route("/games", games)
+]
 
 app.start()
 webapp = Starlette(
     debug=True,
-    routes=[
-        Route("/", home),
-    ],
+    routes=routes,
 )
