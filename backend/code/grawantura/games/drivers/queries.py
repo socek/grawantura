@@ -1,34 +1,34 @@
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import Session
 
 from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Query
 
 
 @Query
-async def get_game_by_id(
+def get_game_by_id(
     game_id: UUID,
-    db: AsyncSession = None,
+    db: Session = None,
 ) -> Optional[dict]:
     stmt = select(GameTable).filter(
         GameTable.id == game_id,
     )
     result = db.execute(stmt)
-    obj = (await result).first()
+    obj = result.first()
     if obj:
         return obj[0]._asdict()
 
 
 @Query
-async def get_games(
-    db: AsyncSession = None,
+def get_games(
+    db: Session = None,
 ) -> list:
     stmt = select(GameTable)
     result = db.execute(stmt)
     elements = []
-    for game in await result:
+    for game in result:
         elements.append(game[0]._asdict())
     return elements

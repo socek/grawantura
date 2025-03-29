@@ -10,16 +10,16 @@ app.start("tests")
 
 
 @fixture(scope="session")
-async def application():
+def application():
     TableFinder(["grawantura"], []).find()
     engine = app.globals["sql"]["engine"]
-    async with engine.begin() as conn:
-        await conn.run_sync(SqlTable.metadata.drop_all)
-        await conn.run_sync(SqlTable.metadata.create_all)
+    with engine.begin() as conn:
+        SqlTable.metadata.drop_all(conn)
+        SqlTable.metadata.create_all(conn)
     return app
 
 
-@fixture(scope="session")
-async def testdb(application):
-    async with Context(application) as ctx:
-        yield await ctx["sql"]
+@fixture
+def testdb(application):
+    with Context(application) as ctx:
+        yield ctx["sql"]

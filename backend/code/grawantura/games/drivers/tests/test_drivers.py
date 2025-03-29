@@ -8,11 +8,11 @@ from grawantura.main.testing import DbTest
 
 
 @DbTest
-async def test_creating(testdb):
+def test_creating(testdb):
     game_id = uuid4()
     now = datetime.now()
-    await create_game("My Game", game_id=game_id, now=now, db=testdb)
-    assert await get_game_by_id(game_id, db=testdb) == {
+    create_game("My Game", game_id=game_id, now=now, db=testdb)
+    assert get_game_by_id(game_id, db=testdb) == {
         "id": game_id,
         "name": "My Game",
         "created_at": now,
@@ -21,16 +21,16 @@ async def test_creating(testdb):
 
 
 @DbTest
-async def test_empty(testdb):
-    assert await get_game_by_id(uuid4(), db=testdb) is None
+def test_empty(testdb):
+    assert get_game_by_id(uuid4(), db=testdb) is None
 
 
 @DbTest
-async def test_listening(testdb):
+def test_listening(testdb):
     game_id = uuid4()
     now = datetime.now()
-    await create_game("My Game", game_id=game_id, now=now, db=testdb)
-    assert list(await get_games(db=testdb)) == [
+    create_game("My Game", game_id=game_id, now=now, db=testdb)
+    assert list(get_games(db=testdb)) == [
         {
             "id": game_id,
             "name": "My Game",

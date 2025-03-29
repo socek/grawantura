@@ -5,7 +5,7 @@ from qq.context import Context
 from qq.plugin import Plugin
 from qq.plugins import SettingsPlugin
 from qq.plugins.logging import LoggingPlugin
-from qq.plugins.sqlalchemy.plugin import AsyncSqlAlchemyPlugin
+from qq.plugins.sqlalchemy.plugin import SqlAlchemyPlugin
 
 SQLALCHEMY_PLUGIN_KEY = "sql"
 
@@ -24,4 +24,4 @@ class GrawanturaApplication(Application):
         self.plugins(IcecreamPlugin())
         self.plugins(SettingsPlugin("grawantura.main.settings"))
         self.plugins(LoggingPlugin())
-        self.plugins[SQLALCHEMY_PLUGIN_KEY] = AsyncSqlAlchemyPlugin()
+        self.plugins[SQLALCHEMY_PLUGIN_KEY] = SqlAlchemyPlugin()

@@ -16,7 +16,7 @@ def sql() -> Settings:
     password = config("POSTGRES_PASSWORD")
     host = config("POSTGRES_HOST")
     return {
-        "url": f"postgresql+asyncpg://{user}:{password}@{host}:5432/{name}",
+        "url": f"postgresql+psycopg2://{user}:{password}@{host}:5432/{name}",
         "options": {
             "pool_recycle": config("DB_POOL_RECYCLE", 3600, cast=int),
             "pool_pre_ping": config("DB_PRE_PING", True, cast=bool),
@@ -84,7 +84,7 @@ def test_sql() -> Settings:
     password = config("POSTGRES_PASSWORD")
     host = config("POSTGRES_HOST")
     return {
-        "url": f"postgresql+asyncpg://{user}:{password}@{host}:5432/{name}",
+        "url": f"postgresql+psycopg2://{user}:{password}@{host}:5432/{name}",
         "options": {
             "pool_recycle": config("DB_POOL_RECYCLE", 3600, cast=int),
             "pool_pre_ping": config("DB_PRE_PING", True, cast=bool),

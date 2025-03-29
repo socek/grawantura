@@ -1,5 +1,9 @@
+<script setup>
+import Event from "./events/event.vue"
+</script>
 <template>
   <RouterView />
+  <Event />
 </template>
 
 <style lang="scss">

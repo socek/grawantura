@@ -5,5 +5,5 @@ from grawantura.main.web import WebEndoint
 @WebEndoint
 async def games(request):
     return {
-        "items": await get_games(),
+        "items": get_games(),
     }

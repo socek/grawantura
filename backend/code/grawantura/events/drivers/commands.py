@@ -1,28 +1,28 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 from uuid import uuid4
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from grawantura.games.drivers.tables import GameTable
+from grawantura.events.drivers.tables import EventTable
 from grawantura.main.globals import Command
 
 
 @Command
-def create_game(
-    name: str,
-    game_id: UUID = None,
-    now: datetime = None,
+def add_event(
+    payload: dict,
+    event_id: Optional[UUID] = None,
+    now: Optional[datetime] = None,
     db: AsyncSession = None,
-) -> list:
-    game_id = game_id or uuid4()
+):
     now = now or datetime.now()
     row = {
-        "id": game_id,
-        "name": name,
+        "id": uuid4(),
         "created_at": now,
         "updated_at": now,
+        "payload": payload,
     }
-    stmt = insert(GameTable).values([row])
+    stmt = insert(EventTable).values([row])
     db.execute(stmt)
