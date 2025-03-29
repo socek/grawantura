@@ -4,7 +4,6 @@ services:
     image: grawantura-backend-image
     volumes:
       - ./backend/code:/code
-      # - ./backend/code/qq:/code/qq
     env_file: .env
     labels:
       - "traefik.http.routers.webapi.rule=PathPrefix(`/api/`)"
@@ -13,21 +12,22 @@ services:
       - "traefik.http.services.webapi.loadbalancer.server.port=8000"
       - "traefik.enable=true"
 
-  # frontend:
-  #   build:
-  #       context: ./frontend/
-  #       target: builder
-  #   image: grawantura-frontend-image
-  #   env_file: .env
-  #   labels:
-  #       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
-  #       - "traefik.http.services.frontend.loadbalancer.server.port=5173"
-  #       - "traefik.enable=true"
-  #   volumes:
-  #       - ./frontend/code:/code
-  #   ports:
-  #       - 5173:5173
-  #   command: yarn dev
+  frontend:
+    build:
+        context: ./frontend/
+        target: builder
+    image: grawantura-frontend-image
+    env_file: .env
+    labels:
+        - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+        - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+        - "traefik.enable=true"
+    volumes:
+        - ./frontend/code:/code
+        - node_modules2:/code/node_modules
+    ports:
+        - 5173:5173
+    command: yarn dev
 
   postgres:
     image: postgres:17.3
@@ -48,3 +48,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 volumes:
   pgdata: {}
+  node_modules2: {}

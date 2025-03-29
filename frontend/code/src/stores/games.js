@@ -1,7 +1,6 @@
-import { supabase, createDefaultState } from './supabase'
+import axios from 'axios';
+import { createDefaultState } from './supabase'
 
 export default createDefaultState("games", async () => {
-  return await supabase
-    .from('games')
-    .select(`*`)
+  return await axios("/api/games")
 })

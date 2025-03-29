@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from grawantura.main.app import SQLALCHEMY_PLUGIN_KEY
 from grawantura.main.globals import app
 from grawantura.main.tables import SqlTable
 from grawantura.main.tables import TableFinder
@@ -87,7 +88,7 @@ def run_migrations_online() -> None:
 
 app.start()
 TableFinder(["grawantura"], []).find()
-dburl = app.plugins["psql"].url
+dburl = app.plugins[SQLALCHEMY_PLUGIN_KEY].url
 config.set_main_option("sqlalchemy.url", dburl)
 if context.is_offline_mode():
     run_migrations_offline()

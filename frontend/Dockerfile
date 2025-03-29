@@ -1,4 +1,4 @@
-FROM node:23 as builder
+FROM node:23 AS builder
 
 ENV CODE_DIR /code
 
