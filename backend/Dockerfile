@@ -25,9 +25,14 @@ WORKDIR $APP_DIR
 USER user
 RUN cd $USER_DIR && echo "source /code/env/profile" >> $USER_DIR/.bashrc
 
+COPY --chown=user:user code/pyproject.toml $APP_DIR
+COPY --chown=user:user code/poetry.lock $APP_DIR
+COPY --chown=user:user code/README.md $APP_DIR
+RUN poetry install --all-extras --all-groups --no-root
+
 # install app
 COPY --chown=user:user code/ $APP_DIR
-RUN poetry install --all-extras --all-groups
+RUN poetry run ipython profile create && rm /home/user/.ipython/profile_default/ipython_config.py && ln -s /code/env/ipython_config.py /home/user/.ipython/profile_default/ipython_config.py
 
 ENTRYPOINT ["/code/entrypoint"]
 CMD ["webapi"]
