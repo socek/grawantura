@@ -15,6 +15,7 @@ def get_game_by_id(
 ) -> Optional[dict]:
     stmt = select(GameTable).filter(
         GameTable.id == game_id,
+        GameTable.is_deleted.isnot(True),
     )
     result = db.execute(stmt)
     obj = result.first()
@@ -26,7 +27,13 @@ def get_game_by_id(
 def get_games(
     db: Session = None,
 ) -> list:
-    stmt = select(GameTable).order_by(GameTable.created_at.asc())
+    stmt = (
+        select(GameTable)
+        .order_by(GameTable.created_at.asc())
+        .filter(
+            GameTable.is_deleted.isnot(True),
+        )
+    )
     result = db.execute(stmt)
     elements = []
     for game in result:

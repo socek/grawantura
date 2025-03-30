@@ -52,5 +52,5 @@ def delete_game(
     game_id: UUID,
     db: AsyncSession = None,
 ):
-    stmt = delete(GameTable).where(GameTable.id == game_id)
+    stmt = update(GameTable).where(GameTable.id == game_id).values({"is_deleted": True})
     db.execute(stmt)

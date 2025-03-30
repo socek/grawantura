@@ -1,7 +1,10 @@
 from datetime import datetime
+from datetime import timedelta
 from uuid import uuid4
 
 from grawantura.games.drivers.commands import create_game
+from grawantura.games.drivers.commands import delete_game
+from grawantura.games.drivers.commands import update_game
 from grawantura.games.drivers.queries import get_game_by_id
 from grawantura.games.drivers.queries import get_games
 from grawantura.main.testing import DbTest
@@ -17,6 +20,7 @@ def test_creating(testdb):
         "name": "My Game",
         "created_at": now,
         "updated_at": now,
+        "is_deleted": None,
     }
 
 
@@ -36,5 +40,36 @@ def test_listening(testdb):
             "name": "My Game",
             "created_at": now,
             "updated_at": now,
+            "is_deleted": None,
         }
     ]
+
+
+@DbTest
+def test_deleted(testdb):
+    game_id = uuid4()
+    now = datetime.now()
+    create_game("My Game", game_id=game_id, now=now, db=testdb)
+
+    delete_game(game_id)
+
+    assert get_game_by_id(game_id, db=testdb) is None
+    assert list(get_games(db=testdb)) == []
+
+
+@DbTest
+def test_updating(testdb):
+    game_id = uuid4()
+    now = datetime.now()
+    after = datetime.now() + timedelta(seconds=1)
+    create_game("My Game", game_id=game_id, now=now, db=testdb)
+
+    update_game(game_id, "New Name", after, db=testdb)
+
+    assert get_game_by_id(game_id, db=testdb) == {
+        "id": game_id,
+        "name": "New Name",
+        "created_at": now,
+        "updated_at": after,
+        "is_deleted": None,
+    }
