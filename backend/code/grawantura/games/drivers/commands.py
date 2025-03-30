@@ -2,10 +2,9 @@ from datetime import datetime
 from uuid import UUID
 from uuid import uuid4
 
-from sqlalchemy import delete
 from sqlalchemy import insert
 from sqlalchemy import update
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 
 from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Command
@@ -16,7 +15,7 @@ def create_game(
     name: str,
     game_id: UUID = None,
     now: datetime = None,
-    db: AsyncSession = None,
+    db: Session = None,
 ):
     game_id = game_id or uuid4()
     now = now or datetime.now()
@@ -35,9 +34,8 @@ def update_game(
     game_id: UUID,
     name: str,
     now: datetime = None,
-    db: AsyncSession = None,
+    db: Session = None,
 ):
-    game_id = game_id or uuid4()
     now = now or datetime.now()
     row = {
         "name": name,
@@ -50,7 +48,7 @@ def update_game(
 @Command
 def delete_game(
     game_id: UUID,
-    db: AsyncSession = None,
+    db: Session = None,
 ):
     stmt = update(GameTable).where(GameTable.id == game_id).values({"is_deleted": True})
     db.execute(stmt)

@@ -1,6 +1,8 @@
 from datetime import datetime
+from typing import Generator
 
 from starlette.requests import Request
+from starlette.routing import Route
 
 from grawantura.events.drivers.queries import get_events
 from grawantura.main.web import WebEndpoint
@@ -21,3 +23,7 @@ async def events(request: Request):
         "elements": get_events(fromtime),
         "time": now,
     }
+
+
+def get_routes(prefix: str) -> Generator[Route, None, None]:
+    yield Route(prefix, events, methods=["GET"])

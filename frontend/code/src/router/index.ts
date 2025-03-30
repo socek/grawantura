@@ -5,6 +5,8 @@ import AppLayout from '../layouts/AppLayout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
+import useAuthStore from '@/auth/store'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
@@ -20,6 +22,9 @@ const routes: Array<RouteRecordRaw> = [
         name: 'dashboard',
         path: 'dashboard',
         component: () => import('../pages/admin/dashboard/Dashboard.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         name: 'games',
@@ -82,7 +87,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'login',
         path: 'login',
-        component: () => import('../pages/auth/Login.vue'),
+        component: () => import('@/auth/pages/Login.vue'),
       },
       {
         name: 'signup',
@@ -112,6 +117,7 @@ const routes: Array<RouteRecordRaw> = [
   },
 ]
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
@@ -126,6 +132,21 @@ const router = createRouter({
     }
   },
   routes,
+})
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  if (to.meta.requiresAuth) {
+    if (authStore.isAuthorized) {
+      // User is authenticated, proceed to the route
+      next();
+    } else {
+      // User is not authenticated, redirect to login
+      next('/auth/login');
+    }
+  } else {
+    // Non-protected route, allow access
+    next();
+  }
 })
 
 export default router

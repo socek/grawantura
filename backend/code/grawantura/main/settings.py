@@ -7,6 +7,7 @@ def default() -> Settings:
     settings = Settings()
     settings["sql"] = sql()
     settings["logging"] = logging()
+    settings["auth"] = auth()
     return settings
 
 
@@ -63,6 +64,13 @@ def logging() -> Settings:
                 "qualname": "fajabot",
             },
         },
+    }
+
+
+def auth():
+    return {
+        "salt": config("AUTH_SALT", "x").encode("UTF8"),
+        "jwt_secret": config("AUTH_JWT_SECRET", "xy").encode("UTF8"),
     }
 
 

@@ -20,8 +20,8 @@
 
   onMounted(async () => {
     const res = await axios('/api/events')
-    console.log(res.data)
     lastTime = res.data.time
+    console.log(res.data)
     cycleReference = setInterval(fetchData, 1000)
   })
 

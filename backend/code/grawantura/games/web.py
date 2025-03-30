@@ -1,3 +1,5 @@
+from typing import Generator
+
 from starlette.routing import Route
 
 from grawantura.games.drivers import commands
@@ -44,7 +46,7 @@ async def delete_game(request) -> dict:
     }
 
 
-def get_routes(prefix: str):
+def get_routes(prefix: str) -> Generator[Route, None, None]:
     yield Route(prefix, games_list, methods=["GET"])
     yield Route(prefix, create_game, methods=["POST"])
     yield Route(prefix, update_game, methods=["PATCH"])

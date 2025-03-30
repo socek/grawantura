@@ -45,7 +45,6 @@ export const createDefaultState = (name, queryFn) => {
           }
         } catch (error) {
           this.setStatus(Status.Failed)
-          console.log(error)
         }
       }
 

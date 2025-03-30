@@ -1,10 +1,10 @@
 import axios from 'axios';
-const { init: notify } = useToast()
 import { useToast } from 'vuestic-ui'
 import useGamesStore from './store'
 import colors from '@/base/colors'
 
 const GAMES_URL = "/api/games"
+const { init: notify } = useToast()
 const gamesStore = useGamesStore()
 
 const createGame = async (row) => {

@@ -42,7 +42,8 @@ import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useForm, useToast } from 'vuestic-ui'
 import { validators } from '../../services/utils'
-import { supabase } from '@/stores/supabase'
+import colors from '@/base/colors'
+import { authorize } from "@/auth/commands"
 
 const { validate } = useForm('form')
 const { push } = useRouter()
@@ -54,17 +55,11 @@ const formData = reactive({
 })
 
 const handleLogin = async () => {
-  try {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    })
-    if (error) throw error
+  const is_authorized = await authorize(formData.email, formData.password)
+  if(is_authorized) {
     push({ name: 'dashboard' })
-  } catch (error) {
-    if (error instanceof Error) {
-      init({"message": error.message, color: "#FF0000"})
-    }
+  } else {
+    init({"message": "Could not authorize", color: colors.fail})
   }
 }
 

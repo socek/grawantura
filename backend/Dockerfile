@@ -32,6 +32,7 @@ RUN poetry install --all-extras --all-groups --no-root
 
 # install app
 COPY --chown=user:user code/ $APP_DIR
+RUN poetry install --all-extras --all-groups
 RUN poetry run ipython profile create && rm /home/user/.ipython/profile_default/ipython_config.py && ln -s /code/env/ipython_config.py /home/user/.ipython/profile_default/ipython_config.py
 
 ENTRYPOINT ["/code/entrypoint"]

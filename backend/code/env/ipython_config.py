@@ -1,12 +1,13 @@
 from grawantura.main.globals import app
 
+config = get_config()  # noqa
+
 print("")
 print("Starting Grawantura env...")
 print("")
 app.start()
 
 print("Adding default imports:")
-config = get_config()  # noqa
 
 config.InteractiveShellApp.exec_lines = [
     "from uuid import UUID, uuid4",
