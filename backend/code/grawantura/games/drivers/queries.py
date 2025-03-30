@@ -26,7 +26,7 @@ def get_game_by_id(
 def get_games(
     db: Session = None,
 ) -> list:
-    stmt = select(GameTable)
+    stmt = select(GameTable).order_by(GameTable.created_at.asc())
     result = db.execute(stmt)
     elements = []
     for game in result:

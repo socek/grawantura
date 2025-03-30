@@ -1,5 +1,6 @@
 <script setup>
-  import { useModal, useToast } from 'vuestic-ui'
+  import { useModal } from 'vuestic-ui'
+  import commands from '@/pages/admin/games/commands'
 
   const props = defineProps(['item_id', 'name'])
   const { confirm } = useModal()
@@ -12,7 +13,7 @@
       size: 'small',
     })
     if (agreed) {
-      isVisible.value = false
+      await commands.deleteGame(props.item_id)
     }
   }
 </script>

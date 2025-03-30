@@ -3,8 +3,8 @@ import { useModal } from 'vuestic-ui'
 import { computed, onMounted, ref } from 'vue'
 import { useVModel } from '@vueuse/core'
 
-import { Status } from '@/stores/supabase'
-import useGamesStore from '@/stores/games'
+import { Status } from '@/base/basestore'
+import useGamesStore from '@/pages/admin/games/store'
 
 import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
 import deleteGameForm from '@/pages/admin/games/widgets/deleteGame.vue'
@@ -20,7 +20,6 @@ onMounted(async () => {
 const isLoading = computed(() => {
   return [Status.BeforeLoad, Status.Loading].indexOf(gamesStore.getStatus) != -1
 })
-
 
 const columns = [
   { label: 'Name', key: 'name', sortable: true },

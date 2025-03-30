@@ -1,14 +1,13 @@
 <script setup>
-  import axios from 'axios'
   import { onMounted, ref, toRaw } from 'vue'
   import { validators } from '@/services/utils'
-  import { useModal, useForm, useToast } from 'vuestic-ui'
+  import { useModal, useForm } from 'vuestic-ui'
   import { isEqual } from 'lodash';
-  import useGamesStore from '@/stores/games'
+  import useGamesStore from '@/pages/admin/games/store'
+  import commands from '@/pages/admin/games/commands'
 
   const props = defineProps(['item_id'])
   const gamesStore = useGamesStore()
-  const { init: notify } = useToast()
 
   const { confirm } = useModal()
   const form = useForm('edit-game-form')
@@ -40,29 +39,11 @@
 
   const onSave = async () => {
     if (form.validate()) {
-      try {
-        await axios.patch(
-          "/api/games",
-          {
-            "game_id": props.item_id,
-            "name": gameData.value.name
-          }
-        )
-      } catch(error) {
-        notify({
-          message: `Row save failed`,
-          color: '#FF0000',
-        })
-      }
-      notify({
-        message: `Row saved!`,
-        color: 'success',
+      await commands.editGame({
+        "game_id": props.item_id,
+        "name": gameData.value.name
       })
-      console.log("Fetching emit")
-      await gamesStore.fetch(true)
-
       isVisible.value = false
-
     }
   }
 

@@ -2,8 +2,8 @@
 import { onMounted, ref, computed } from 'vue'
 import { defineVaDataTableColumns } from 'vuestic-ui'
 
-import { Status } from '@/stores/supabase'
-import useGamesStore from '@/stores/games'
+import { Status } from '@/base/basestore'
+import useGamesStore from '@/pages/admin/games/store'
 const gamesStore = useGamesStore()
 
 onMounted(async () => {

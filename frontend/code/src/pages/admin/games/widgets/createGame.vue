@@ -2,12 +2,9 @@
   import axios from 'axios'
   import { onMounted, ref, toRaw } from 'vue'
   import { validators } from '@/services/utils'
-  import { useModal, useForm, useToast } from 'vuestic-ui'
+  import { useModal, useForm } from 'vuestic-ui'
   import { isEqual } from 'lodash';
-  import useGamesStore from '@/stores/games'
-
-  const gamesStore = useGamesStore()
-  const { init: notify } = useToast()
+  import commands from '@/pages/admin/games/commands'
 
   const { confirm } = useModal()
   const form = useForm('create-game-form')
@@ -36,23 +33,8 @@
 
   const onSave = async () => {
     if (form.validate()) {
-      const { error } = await axios.post("/api/games", { ...newGame.value })
-
-      if (error) {
-        notify({
-          message: `Row save failed`,
-          color: '#FF0000',
-        })
-      } else {
-        notify({
-          message: `Row saved!`,
-          color: 'success',
-        })
-        await gamesStore.fetch(true)
-      }
-
+      await commands.createGame({...newGame.value})
       doShowAddGame.value = false
-
     }
   }
 

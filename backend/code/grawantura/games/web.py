@@ -1,10 +1,12 @@
+from starlette.routing import Route
+
 from grawantura.games.drivers import commands
 from grawantura.games.drivers.queries import get_games
 from grawantura.main.web import WebEndpoint
 
 
 @WebEndpoint
-async def games(request):
+async def games_list(request) -> dict:
     return {
         "items": get_games(),
     }
@@ -20,7 +22,7 @@ async def create_game(request):
 
 
 @WebEndpoint
-async def update_game(request):
+async def update_game(request) -> dict:
     payload = await request.json()
     commands.update_game(
         game_id=payload["game_id"],
@@ -29,3 +31,21 @@ async def update_game(request):
     return {
         "status": "success",
     }
+
+
+@WebEndpoint
+async def delete_game(request) -> dict:
+    payload = await request.json()
+    commands.delete_game(
+        game_id=payload["game_id"],
+    )
+    return {
+        "status": "success",
+    }
+
+
+def get_routes(prefix: str):
+    yield Route(prefix, games_list, methods=["GET"])
+    yield Route(prefix, create_game, methods=["POST"])
+    yield Route(prefix, update_game, methods=["PATCH"])
+    yield Route(prefix, delete_game, methods=["DELETE"])

@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID
 from uuid import uuid4
 
+from sqlalchemy import delete
 from sqlalchemy import insert
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +17,7 @@ def create_game(
     game_id: UUID = None,
     now: datetime = None,
     db: AsyncSession = None,
-) -> list:
+):
     game_id = game_id or uuid4()
     now = now or datetime.now()
     row = {
@@ -35,7 +36,7 @@ def update_game(
     name: str,
     now: datetime = None,
     db: AsyncSession = None,
-) -> list:
+):
     game_id = game_id or uuid4()
     now = now or datetime.now()
     row = {
@@ -43,4 +44,13 @@ def update_game(
         "updated_at": now,
     }
     stmt = update(GameTable).where(GameTable.id == game_id).values(**row)
+    db.execute(stmt)
+
+
+@Command
+def delete_game(
+    game_id: UUID,
+    db: AsyncSession = None,
+):
+    stmt = delete(GameTable).where(GameTable.id == game_id)
     db.execute(stmt)
