@@ -3,10 +3,10 @@ from datetime import datetime
 from starlette.requests import Request
 
 from grawantura.events.drivers.queries import get_events
-from grawantura.main.web import WebEndoint
+from grawantura.main.web import WebEndpoint
 
 
-@WebEndoint
+@WebEndpoint
 async def events(request: Request):
     now = datetime.now()
     if not request.query_params.get("time"):

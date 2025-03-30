@@ -26,7 +26,7 @@ def sanizite_value(value):
         return [sanizite_value(element) for element in value]
     return value
 
-def WebEndoint(fun):
+def WebEndpoint(fun):
     @wraps(fun)
     async def wrapper(*args, **kwargs):
         result = await fun(*args, **kwargs)

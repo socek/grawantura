@@ -8,7 +8,6 @@ const gamesStore = useGamesStore()
 
 onMounted(async () => {
   await gamesStore.fetch()
-  console.log(gamesStore)
 })
 
 const isLoading = computed(() => {

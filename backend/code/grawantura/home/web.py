@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from grawantura.main.web import WebEndoint
+from grawantura.main.web import WebEndpoint
 
 
-@WebEndoint
+@WebEndpoint
 async def home(request):
     return {
         "status": "running",

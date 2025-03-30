@@ -1,10 +1,10 @@
 <script setup>
+  import axios from 'axios'
   import { onMounted, ref, toRaw } from 'vue'
   import { validators } from '@/services/utils'
   import { useModal, useForm, useToast } from 'vuestic-ui'
   import { isEqual } from 'lodash';
   import useGamesStore from '@/stores/games'
-  import { supabase } from '@/stores/supabase'
 
   const props = defineProps(['item_id'])
   const gamesStore = useGamesStore()
@@ -40,27 +40,26 @@
 
   const onSave = async () => {
     if (form.validate()) {
-      const { error } = await supabase
-        .from('games')
-        .update({
-          name: gameData.value.name
-        })
-        .eq("id", props.item_id)
-      console.log(error)
-
-      if (error) {
+      try {
+        await axios.patch(
+          "/api/games",
+          {
+            "game_id": props.item_id,
+            "name": gameData.value.name
+          }
+        )
+      } catch(error) {
         notify({
           message: `Row save failed`,
           color: '#FF0000',
         })
-      } else {
-        notify({
-          message: `Row saved!`,
-          color: 'success',
-        })
-        console.log("Fetching emit")
-        await gamesStore.fetch(true)
       }
+      notify({
+        message: `Row saved!`,
+        color: 'success',
+      })
+      console.log("Fetching emit")
+      await gamesStore.fetch(true)
 
       isVisible.value = false
 

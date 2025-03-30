@@ -8,4 +8,4 @@ def DbTest(fun):
         finally:
             testdb.rollback()
 
-    return mark.usefixtures("application")(mark.integration(wrapper))
+    return mark.integration(wrapper)

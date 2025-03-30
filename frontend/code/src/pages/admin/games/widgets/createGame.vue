@@ -1,10 +1,10 @@
 <script setup>
+  import axios from 'axios'
   import { onMounted, ref, toRaw } from 'vue'
   import { validators } from '@/services/utils'
   import { useModal, useForm, useToast } from 'vuestic-ui'
   import { isEqual } from 'lodash';
   import useGamesStore from '@/stores/games'
-  import { supabase } from '@/stores/supabase'
 
   const gamesStore = useGamesStore()
   const { init: notify } = useToast()
@@ -36,9 +36,7 @@
 
   const onSave = async () => {
     if (form.validate()) {
-      const { error } = await supabase
-        .from('games')
-        .insert({ ...newGame.value })
+      const { error } = await axios.post("/api/games", { ...newGame.value })
 
       if (error) {
         notify({
