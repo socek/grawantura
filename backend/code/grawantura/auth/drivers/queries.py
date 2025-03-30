@@ -25,10 +25,24 @@ def validate_user(
     email: str,
     password: str,
     db: Session = None,
-) -> bool:
-    stmt = select(UserTable).filter(
+) -> Optional[UUID]:
+    stmt = select(UserTable.id).filter(
         UserTable.email == email,
         UserTable.password == hash_password(password),
+        UserTable.is_deleted.isnot(True),
+    )
+    obj = db.execute(stmt).first()
+    if obj:
+        return obj[0]
+
+
+@Query
+def validate_user_id(
+    user_id: UUID,
+    db: Session = None,
+) -> bool:
+    stmt = select(UserTable.id).filter(
+        UserTable.id == user_id,
         UserTable.is_deleted.isnot(True),
     )
     obj = db.execute(stmt).first()

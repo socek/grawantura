@@ -25,6 +25,7 @@ def get_game_by_id(
 
 @Query
 def get_games(
+    user_id: UUID = None,
     db: Session = None,
 ) -> list:
     stmt = (
@@ -34,6 +35,8 @@ def get_games(
             GameTable.is_deleted.isnot(True),
         )
     )
+    if user_id:
+        stmt = stmt.filter(GameTable.user_id == user_id)
     result = db.execute(stmt)
     elements = []
     for game in result:

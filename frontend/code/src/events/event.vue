@@ -1,27 +1,32 @@
 <script setup>
   import { onMounted, onUnmounted, ref } from 'vue'
-  import axios from 'axios'
+  import jwtCall from "@/auth/calls"
+  import useAuthStore from "@/auth/store"
 
+  const EVENTS_URL = "/api/events"
   let lastTime = null;
   let cycleReference = null;
+  const authStore = useAuthStore()
 
   const fetchData = async () => {
-    const res = await axios.get(
-      '/api/events',
-      {
+    if (!authStore.isAuthorized) {
+      lastTime = null;
+      return
+    }
+    const res = await jwtCall({
+      "url": EVENTS_URL,
+      "method": "GET",
+      "data": {
           params: {"time": lastTime}
       }
-    )
+    })
     res.data.elements.forEach(async (element) => {
-      console.log(element)
+      console.log("event", element) // TODO: do something with the data
     })
     lastTime = res.data.time
   }
 
   onMounted(async () => {
-    const res = await axios('/api/events')
-    lastTime = res.data.time
-    console.log(res.data)
     cycleReference = setInterval(fetchData, 1000)
   })
 

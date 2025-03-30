@@ -13,14 +13,16 @@ from grawantura.main.testing import DbTest
 @DbTest
 def test_creating(testdb):
     game_id = uuid4()
+    user_id = uuid4()
     now = datetime.now()
-    create_game("My Game", game_id=game_id, now=now, db=testdb)
+    create_game("My Game", game_id=game_id, user_id=user_id, now=now, db=testdb)
     assert get_game_by_id(game_id, db=testdb) == {
         "id": game_id,
         "name": "My Game",
         "created_at": now,
         "updated_at": now,
         "is_deleted": None,
+        "user_id": user_id,
     }
 
 
@@ -32,8 +34,9 @@ def test_empty(testdb):
 @DbTest
 def test_listening(testdb):
     game_id = uuid4()
+    user_id = uuid4()
     now = datetime.now()
-    create_game("My Game", game_id=game_id, now=now, db=testdb)
+    create_game("My Game", game_id=game_id, user_id=user_id, now=now, db=testdb)
     assert list(get_games(db=testdb)) == [
         {
             "id": game_id,
@@ -41,6 +44,7 @@ def test_listening(testdb):
             "created_at": now,
             "updated_at": now,
             "is_deleted": None,
+            "user_id": user_id,
         }
     ]
 
@@ -48,8 +52,9 @@ def test_listening(testdb):
 @DbTest
 def test_deleted(testdb):
     game_id = uuid4()
+    user_id = uuid4()
     now = datetime.now()
-    create_game("My Game", game_id=game_id, now=now, db=testdb)
+    create_game("My Game", user_id=user_id, game_id=game_id, now=now, db=testdb)
 
     delete_game(game_id)
 
@@ -60,11 +65,15 @@ def test_deleted(testdb):
 @DbTest
 def test_updating(testdb):
     game_id = uuid4()
+    user_id = uuid4()
     now = datetime.now()
-    after = datetime.now() + timedelta(seconds=1)
-    create_game("My Game", game_id=game_id, now=now, db=testdb)
 
-    update_game(game_id, "New Name", after, db=testdb)
+    after = datetime.now() + timedelta(seconds=1)
+    new_user_id = uuid4()
+
+    create_game("My Game", game_id=game_id, user_id=user_id, now=now, db=testdb)
+
+    update_game(game_id, "New Name", user_id=new_user_id, now=after, db=testdb)
 
     assert get_game_by_id(game_id, db=testdb) == {
         "id": game_id,
@@ -72,4 +81,5 @@ def test_updating(testdb):
         "created_at": now,
         "updated_at": after,
         "is_deleted": None,
+        "user_id": new_user_id,
     }

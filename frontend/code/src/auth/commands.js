@@ -1,7 +1,8 @@
 import axios from 'axios';
 import useAuthStore from './store'
 
-const AUTH_URL = "/api/auth"
+import {AUTH_URL} from "./consts"
+
 const authStore = useAuthStore()
 
 export const authorize = async (email, password) => {
@@ -19,7 +20,6 @@ export const authorize = async (email, password) => {
   }
   if(result.data["status"] == "success") {
     authStore.setToken(result.data["token"])
-    localStorage.setItem('jwt_token', result.data["token"])
   } else {
     return false;
   }

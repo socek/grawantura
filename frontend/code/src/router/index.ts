@@ -6,6 +6,7 @@ import AppLayout from '../layouts/AppLayout.vue'
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
 import useAuthStore from '@/auth/store'
+import { DEFAULT_UNAUTHORIZE_ROUTE } from "@/base/consts"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,9 @@ const routes: Array<RouteRecordRaw> = [
         name: 'games',
         path: 'games',
         component: () => import('../pages/admin/games/Games.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         name: 'settings',
@@ -88,21 +92,33 @@ const routes: Array<RouteRecordRaw> = [
         name: 'login',
         path: 'login',
         component: () => import('@/auth/pages/Login.vue'),
+        meta: {
+          requiresNoAuth: true
+        },
       },
       {
         name: 'signup',
         path: 'signup',
         component: () => import('../pages/auth/Signup.vue'),
+        meta: {
+          requiresNoAuth: true
+        },
       },
       {
         name: 'recover-password',
         path: 'recover-password',
         component: () => import('../pages/auth/RecoverPassword.vue'),
+        meta: {
+          requiresNoAuth: true
+        },
       },
       {
         name: 'recover-password-email',
         path: 'recover-password-email',
         component: () => import('../pages/auth/CheckTheEmail.vue'),
+        meta: {
+          requiresNoAuth: true
+        },
       },
       {
         path: '',
@@ -141,8 +157,17 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       // User is not authenticated, redirect to login
-      next('/auth/login');
+      next(DEFAULT_UNAUTHORIZE_ROUTE);
     }
+  } else if (to.meta.requiresNoAuth) {
+    if (authStore.isAuthorized) {
+      // User is authenticated, proceed to the route
+      next('/dashboard');
+    } else {
+      // User is not authenticated, redirect to login
+      next();
+    }
+
   } else {
     // Non-protected route, allow access
     next();

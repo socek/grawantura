@@ -4,12 +4,14 @@ from typing import Generator
 from starlette.requests import Request
 from starlette.routing import Route
 
+from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.queries import get_events
 from grawantura.main.web import WebEndpoint
 
 
 @WebEndpoint
 async def events(request: Request):
+    validate_user_id(request)
     now = datetime.now()
     if not request.query_params.get("time"):
         return {

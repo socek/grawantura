@@ -1,7 +1,8 @@
-import axios from 'axios';
 import { useToast } from 'vuestic-ui'
 import useGamesStore from './store'
+import useAuthStore from "@/auth/store"
 import colors from '@/base/colors'
+import jwtCall from "@/auth/calls"
 
 const GAMES_URL = "/api/games"
 const { init: notify } = useToast()
@@ -9,11 +10,13 @@ const gamesStore = useGamesStore()
 
 const createGame = async (row) => {
   try {
-    await axios.post(GAMES_URL,
-      {
+    await jwtCall({
+      "url": GAMES_URL,
+      "method": "POST",
+      "data": {
         name: row.name
-     }
-    )
+      }
+    })
   } catch(error) {
     notify({
       message: `Row save failed`,
@@ -31,13 +34,14 @@ const createGame = async (row) => {
 
 const editGame = async (row) => {
   try {
-    await axios.patch(
-      GAMES_URL,
-      {
+    await jwtCall({
+      "url": GAMES_URL,
+      "method": "PATCH",
+      "data": {
         "game_id": row.game_id,
         "name": row.name,
-      }
-    )
+      },
+    })
   } catch(error) {
     notify({
       message: `Row save failed`,
@@ -54,14 +58,13 @@ const editGame = async (row) => {
 
 const deleteGame = async (game_id) => {
   try {
-    await axios.delete(
-      GAMES_URL,
-      {
-        data: {
-          "game_id": game_id,
-        }
-      }
-    )
+    await jwtCall({
+      "url": GAMES_URL,
+      "method": "DELETE",
+      "data": {
+        "game_id": game_id,
+      },
+    })
   } catch(error) {
     notify({
       message: `Row delete failed`,

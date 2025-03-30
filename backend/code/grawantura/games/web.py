@@ -2,6 +2,7 @@ from typing import Generator
 
 from starlette.routing import Route
 
+from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.games.drivers import commands
 from grawantura.games.drivers.queries import get_games
 from grawantura.main.web import WebEndpoint
@@ -9,15 +10,18 @@ from grawantura.main.web import WebEndpoint
 
 @WebEndpoint
 async def games_list(request) -> dict:
+    user_id = validate_user_id(request)
+    ic(user_id)
     return {
-        "items": get_games(),
+        "items": get_games(user_id),
     }
 
 
 @WebEndpoint
 async def create_game(request):
+    user_id = validate_user_id(request)
     payload = await request.json()
-    commands.create_game(name=payload["name"])
+    commands.create_game(name=payload["name"], user_id=user_id)
     return {
         "status": "success",
     }
@@ -25,6 +29,7 @@ async def create_game(request):
 
 @WebEndpoint
 async def update_game(request) -> dict:
+    validate_user_id(request)
     payload = await request.json()
     commands.update_game(
         game_id=payload["game_id"],
@@ -37,6 +42,7 @@ async def update_game(request) -> dict:
 
 @WebEndpoint
 async def delete_game(request) -> dict:
+    validate_user_id(request)
     payload = await request.json()
     commands.delete_game(
         game_id=payload["game_id"],
