@@ -29,7 +29,7 @@ const createGame = async (row) => {
     message: `Row saved!`,
     color: colors.success,
   })
-  await gamesStore.fetch(true)
+  // await gamesStore.fetch(true)
 }
 
 const editGame = async (row) => {
@@ -53,7 +53,7 @@ const editGame = async (row) => {
     message: `Row saved!`,
     color: colors.success,
   })
-  await gamesStore.fetch(true)
+  // await gamesStore.fetch(true)
 }
 
 const deleteGame = async (game_id) => {
@@ -76,7 +76,7 @@ const deleteGame = async (game_id) => {
     message: `Row deleted!`,
     color: colors.success,
   })
-  await gamesStore.fetch(true)
+  // await gamesStore.fetch(true)
 }
 
 export default {

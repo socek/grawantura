@@ -19,14 +19,17 @@ def create_jwt(user_id: UUID, settings: dict = None) -> str:
     return encode(payload, settings["jwt_secret"], algorithm="HS256")
 
 
-@AppFun
-@SetInicjator("settings", SettingsInicjator("auth"))
-def validate_user_id(request: Request, settings: dict = None) -> UUID:
+def validate_user_id(request: Request) -> UUID:
     bearer_token = request.headers.get("auth_token")
     if bearer_token is None:
         raise HTTPException(status_code=401)
+    return validate_user_id_from_token(bearer_token)
+
+@AppFun
+@SetInicjator("settings", SettingsInicjator("auth"))
+def validate_user_id_from_token(token, settings: dict = None) -> UUID:
     try:
-        payload = decode(bearer_token, settings["jwt_secret"], algorithms=["HS256"])
+        payload = decode(token, settings["jwt_secret"], algorithms=["HS256"])
     except PyJWTError:
         raise HTTPException(status_code=401)
     try:
