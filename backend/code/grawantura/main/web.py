@@ -11,9 +11,10 @@ def sanitize(data: dict):
     """
     Sanitize data so it can be json serialize.
     """
+    sanitized = {}
     for key, value in data.items():
-        data[key] = sanizite_value(value)
-    return data
+        sanitized[key] = sanizite_value(value)
+    return sanitized
 
 def sanizite_value(value):
     if isinstance(value, UUID):

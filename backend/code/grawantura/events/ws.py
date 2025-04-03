@@ -5,7 +5,6 @@ from enum import Enum
 from enum import auto
 
 from starlette.endpoints import WebSocketEndpoint
-from starlette.exceptions import HTTPException
 from starlette.routing import WebSocketRoute
 from starlette.websockets import WebSocket
 
