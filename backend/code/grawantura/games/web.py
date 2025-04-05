@@ -1,5 +1,6 @@
 from typing import Generator
 
+from starlette.requests import Request
 from starlette.routing import Route
 
 from grawantura.auth.jwtsupport import validate_user_id
@@ -10,7 +11,7 @@ from grawantura.main.web import WebEndpoint
 
 
 @WebEndpoint
-async def games_list(request) -> dict:
+async def games_list(request: Request) -> dict:
     user_id = validate_user_id(request)
     return {
         "items": get_games(user_id),
@@ -29,7 +30,7 @@ async def create_game(request):
 
 
 @WebEndpoint
-async def update_game(request) -> dict:
+async def update_game(request: Request) -> dict:
     validate_user_id(request)
     payload = await request.json()
     commands.update_game(
@@ -43,7 +44,7 @@ async def update_game(request) -> dict:
 
 
 @WebEndpoint
-async def delete_game(request) -> dict:
+async def delete_game(request: Request) -> dict:
     validate_user_id(request)
     payload = await request.json()
     commands.delete_game(
@@ -57,6 +58,6 @@ async def delete_game(request) -> dict:
 
 def get_routes(prefix: str) -> Generator[Route, None, None]:
     yield Route(prefix, games_list, methods=["GET"])
-    yield Route(prefix, create_game, methods=["POST"])
+    yield Route(prefix, create_game, methods=["PUT"])
     yield Route(prefix, update_game, methods=["PATCH"])
     yield Route(prefix, delete_game, methods=["DELETE"])

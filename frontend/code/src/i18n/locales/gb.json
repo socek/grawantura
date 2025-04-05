@@ -55,7 +55,8 @@
     "faq": "FAQ",
     "users": "Users",
     "projects": "Projects",
-    "games": "Games"
+    "games": "Games",
+    "questions": "Questions",
   },
   "messages": {
     "all": "See all messages",

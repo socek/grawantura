@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from grawantura.events.drivers.tables import EventTable
 from grawantura.main.globals import Command
+from grawantura.main.web import sanitize
 
 
 @Command
@@ -22,7 +23,8 @@ def add_event(
         "id": uuid4(),
         "created_at": now,
         "updated_at": now,
-        "payload": payload,
+        "payload": sanitize(payload),
     }
+    ic(row)
     stmt = insert(EventTable).values([row])
     db.execute(stmt)

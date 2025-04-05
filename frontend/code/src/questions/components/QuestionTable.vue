@@ -1,36 +1,33 @@
 <script setup>
-import { useModal } from 'vuestic-ui'
 import { computed, onMounted, ref } from 'vue'
-import { useVModel } from '@vueuse/core'
 
-import { Status } from '@/stores/supabase'
-import useGamesStore from '@/stores/games'
+import { Status } from '@/base/basestore'
+import useQuestionStore from '@/questions/store.js'
 
-import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
-import deleteGameForm from '@/pages/admin/games/widgets/deleteGame.vue'
+import editQuestionForm from '@/questions/widgets/editQuestion.vue'
+import deleteQuestionForm from '@/questions/widgets/deleteQuestion.vue'
 
-const gamesStore = useGamesStore()
-
-const props = defineProps(['nameFilter'])
+const props = defineProps(['gameId', 'questionFilter'])
+const questionStore = useQuestionStore(props.gameId)()
 
 onMounted(async () => {
-  await gamesStore.fetch()
+  await questionStore.fetch()
 })
 
 const isLoading = computed(() => {
-  return [Status.BeforeLoad, Status.Loading].indexOf(gamesStore.getStatus) != -1
+  return [Status.BeforeLoad, Status.Loading].indexOf(questionStore.status) != -1
 })
 
-
 const columns = [
-  { label: 'Name', key: 'name', sortable: true },
+  { label: 'Question', key: 'question', sortable: true },
+  { label: 'Answer', key: 'answer', sortable: true },
   { label: ' ', key: 'actions', align: 'right' },
 ]
 
 const perPage = ref(10)
-const games = computed(() => {
-  return gamesStore.items.filter(item => {
-    return item.name.toLowerCase().indexOf(props.nameFilter.toLowerCase()) > -1
+const questions = computed(() => {
+  return questionStore.items.filter(item => {
+    return item.question.toLowerCase().indexOf(props.questionFilter.toLowerCase()) > -1
   })
 })
 const pageNumber = ref(1)
@@ -42,7 +39,7 @@ const totalPages = computed(() => 1)
   <div>
     <VaDataTable
       :columns="columns"
-      :items="games"
+      :items="questions"
       :loading="isLoading"
     >
       <template #cell(name)="{ rowData }">
@@ -53,8 +50,8 @@ const totalPages = computed(() => 1)
 
       <template #cell(actions)="{ rowData }">
         <div class="flex gap-2 justify-end">
-          <editGameForm :item_id="rowData.id" />
-          <deleteGameForm :item_id="rowData.id" :name="rowData.name" />
+          <editQuestionForm :itemId="rowData.id" :gameId="props.gameId" />
+          <deleteQuestionForm :itemId="rowData.id" :gameId="props.gameId" :question="rowData.question" />
         </div>
       </template>
 

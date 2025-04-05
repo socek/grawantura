@@ -2,6 +2,7 @@
   import { onMounted, onUnmounted } from 'vue'
   import useAuthStore from "@/auth/store"
   import useGamesStore from '@/pages/admin/games/store'
+  import useQuestionStore from '@/questions/store'
 
   const gamesStore = useGamesStore()
 
@@ -20,6 +21,11 @@
     refresh: async (socket, payload) => {
       if(payload["payload"]["group"] == "games") {
         await gamesStore.fetch(true)
+      } else if(payload["payload"]["group"] == "questions") {
+        const gameId = payload["payload"]["game_id"]
+        await useQuestionStore(gameId)().fetch(true)
+      } else {
+        console.log("Unknow refresh", payload);
       }
     },
   }

@@ -1,13 +1,12 @@
 <script setup>
-import { useModal } from 'vuestic-ui'
 import { computed, onMounted, ref } from 'vue'
-import { useVModel } from '@vueuse/core'
 
 import { Status } from '@/base/basestore'
 import useGamesStore from '@/pages/admin/games/store'
 
 import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
 import deleteGameForm from '@/pages/admin/games/widgets/deleteGame.vue'
+import goToQuestions from '@/pages/admin/games/widgets/goToQuestions.vue'
 
 const gamesStore = useGamesStore()
 
@@ -54,6 +53,7 @@ const totalPages = computed(() => 1)
         <div class="flex gap-2 justify-end">
           <editGameForm :item_id="rowData.id" />
           <deleteGameForm :item_id="rowData.id" :name="rowData.name" />
+          <goToQuestions :gameId="rowData.id" />
         </div>
       </template>
 

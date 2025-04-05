@@ -25,41 +25,48 @@ export default {
         icon: 'vuestic-iconset-dashboard',
       },
     },
-    {
-      name: 'users',
-      displayName: 'menu.users',
-      meta: {
-        icon: 'group',
-      },
-    },
-    {
-      name: 'projects',
-      displayName: 'menu.projects',
-      meta: {
-        icon: 'folder_shared',
-      },
-    },
-    {
-      name: 'payments',
-      displayName: 'menu.payments',
-      meta: {
-        icon: 'credit_card',
-      },
-      children: [
-        {
-          name: 'payment-methods',
-          displayName: 'menu.payment-methods',
-        },
-        {
-          name: 'pricing-plans',
-          displayName: 'menu.pricing-plans',
-        },
-        {
-          name: 'billing',
-          displayName: 'menu.billing',
-        },
-      ],
-    },
+    // {
+    //   name: 'questions',
+    //   displayName: 'menu.questions',
+    //   meta: {
+    //     icon: 'vuestic-iconset-comments',
+    //   },
+    // },
+    // {
+    //   name: 'users',
+    //   displayName: 'menu.users',
+    //   meta: {
+    //     icon: 'group',
+    //   },
+    // },
+    // {
+    //   name: 'projects',
+    //   displayName: 'menu.projects',
+    //   meta: {
+    //     icon: 'folder_shared',
+    //   },
+    // },
+    // {
+    //   name: 'payments',
+    //   displayName: 'menu.payments',
+    //   meta: {
+    //     icon: 'credit_card',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'payment-methods',
+    //       displayName: 'menu.payment-methods',
+    //     },
+    //     {
+    //       name: 'pricing-plans',
+    //       displayName: 'menu.pricing-plans',
+    //     },
+    //     {
+    //       name: 'billing',
+    //       displayName: 'menu.billing',
+    //     },
+    //   ],
+    // },
     {
       name: 'auth',
       displayName: 'menu.auth',
@@ -82,13 +89,13 @@ export default {
       ],
     },
 
-    {
-      name: 'faq',
-      displayName: 'menu.faq',
-      meta: {
-        icon: 'quiz',
-      },
-    },
+    // {
+    //   name: 'faq',
+    //   displayName: 'menu.faq',
+    //   meta: {
+    //     icon: 'quiz',
+    //   },
+    // },
     {
       name: '404',
       displayName: 'menu.404',

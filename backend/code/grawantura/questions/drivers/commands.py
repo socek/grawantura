@@ -21,6 +21,7 @@ def create_question(
     db: Session = None,
 ):
     game_id = game_id or uuid4()
+    question_id = question_id or uuid4()
     now = now or datetime.now()
     row = {
         "id": question_id,
@@ -31,6 +32,7 @@ def create_question(
         "created_at": now,
         "updated_at": now,
     }
+    ic(row)
     stmt = insert(QuestionTable).values([row])
     db.execute(stmt)
 

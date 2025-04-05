@@ -36,52 +36,66 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        name: 'questions',
+        path: 'games/:gameId/questions',
+        component: () => import('@/questions/pages/QuestionList.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         name: 'preferences',
         path: 'preferences',
         component: () => import('../pages/preferences/Preferences.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
-      {
-        name: 'users',
-        path: 'users',
-        component: () => import('../pages/users/UsersPage.vue'),
-      },
-      {
-        name: 'projects',
-        path: 'projects',
-        component: () => import('../pages/projects/ProjectsPage.vue'),
-      },
-      {
-        name: 'payments',
-        path: '/payments',
-        component: RouteViewComponent,
-        children: [
-          {
-            name: 'payment-methods',
-            path: 'payment-methods',
-            component: () => import('../pages/payments/PaymentsPage.vue'),
-          },
-          {
-            name: 'billing',
-            path: 'billing',
-            component: () => import('../pages/billing/BillingPage.vue'),
-          },
-          {
-            name: 'pricing-plans',
-            path: 'pricing-plans',
-            component: () => import('../pages/pricing-plans/PricingPlans.vue'),
-          },
-        ],
-      },
-      {
-        name: 'faq',
-        path: '/faq',
-        component: () => import('../pages/faq/FaqPage.vue'),
-      },
+      // {
+      //   name: 'users',
+      //   path: 'users',
+      //   component: () => import('../pages/users/UsersPage.vue'),
+      // },
+      // {
+      //   name: 'projects',
+      //   path: 'projects',
+      //   component: () => import('../pages/projects/ProjectsPage.vue'),
+      // },
+      // {
+      //   name: 'payments',
+      //   path: '/payments',
+      //   component: RouteViewComponent,
+      //   children: [
+      //     {
+      //       name: 'payment-methods',
+      //       path: 'payment-methods',
+      //       component: () => import('../pages/payments/PaymentsPage.vue'),
+      //     },
+      //     {
+      //       name: 'billing',
+      //       path: 'billing',
+      //       component: () => import('../pages/billing/BillingPage.vue'),
+      //     },
+      //     {
+      //       name: 'pricing-plans',
+      //       path: 'pricing-plans',
+      //       component: () => import('../pages/pricing-plans/PricingPlans.vue'),
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'faq',
+      //   path: '/faq',
+      //   component: () => import('../pages/faq/FaqPage.vue'),
+      // },
     ],
   },
   {

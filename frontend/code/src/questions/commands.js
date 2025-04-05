@@ -1,20 +1,19 @@
 import { useToast } from 'vuestic-ui'
-import useGamesStore from './store'
-import useAuthStore from "@/auth/store"
 import colors from '@/base/colors'
 import jwtCall from "@/auth/calls"
 
-const GAMES_URL = "/api/games"
+const url = (gameId) => `/api/games/${gameId}/questions`
 const { init: notify } = useToast()
-const gamesStore = useGamesStore()
 
-const createGame = async (row) => {
+const createQuestion = async (row) => {
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": url(row.gameId),
       "method": "PUT",
       "data": {
-        name: row.name
+        "question": row.question,
+        "answer": row.answer,
+        "hints": row.hints,
       }
     })
   } catch(error) {
@@ -31,14 +30,17 @@ const createGame = async (row) => {
   })
 }
 
-const editGame = async (row) => {
+const editQuestion = async (row) => {
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": url(row.gameId),
       "method": "PATCH",
       "data": {
         "game_id": row.game_id,
-        "name": row.name,
+        "question_id": row.questionId,
+        "question": row.question,
+        "answer": row.answer,
+        "hints": row.hints,
       },
     })
   } catch(error) {
@@ -54,13 +56,14 @@ const editGame = async (row) => {
   })
 }
 
-const deleteGame = async (game_id) => {
+const deleteQuestion = async (gameId, questionId) => {
+  console.log(gameId, questionId)
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": url(gameId),
       "method": "DELETE",
       "data": {
-        "game_id": game_id,
+        "question_id": questionId,
       },
     })
   } catch(error) {
@@ -77,7 +80,7 @@ const deleteGame = async (game_id) => {
 }
 
 export default {
-  createGame,
-  editGame,
-  deleteGame,
+  createQuestion,
+  editQuestion,
+  deleteQuestion,
 }
