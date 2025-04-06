@@ -1,7 +1,7 @@
 <script setup>
-  import GamesTable from '@/pages/admin/games/components/GamesTable.vue'
+  import GamesTable from '@/games/components/GamesTable.vue'
   import { ref } from 'vue'
-  import createGameForm from '@/pages/admin/games/widgets/createGame.vue'
+  import createGameForm from '@/games/widgets/createGame.vue'
 
   const nameFilter = ref("")
 </script>

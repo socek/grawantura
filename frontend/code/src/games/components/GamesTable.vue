@@ -2,11 +2,11 @@
 import { computed, onMounted, ref } from 'vue'
 
 import { Status } from '@/base/basestore'
-import useGamesStore from '@/pages/admin/games/store'
+import useGamesStore from '@/games/store'
 
-import editGameForm from '@/pages/admin/games/widgets/editGame.vue'
-import deleteGameForm from '@/pages/admin/games/widgets/deleteGame.vue'
-import goToQuestions from '@/pages/admin/games/widgets/goToQuestions.vue'
+import editGameForm from '@/games/widgets/editGame.vue'
+import deleteGameForm from '@/games/widgets/deleteGame.vue'
+import goToQuestions from '@/games/widgets/goToQuestions.vue'
 
 const gamesStore = useGamesStore()
 

@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'games',
         path: 'games',
-        component: () => import('../pages/admin/games/Games.vue'),
+        component: () => import('@/games/pages/Games.vue'),
         meta: {
           requiresAuth: true
         }

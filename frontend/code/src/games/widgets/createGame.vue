@@ -4,7 +4,7 @@
   import { validators } from '@/services/utils'
   import { useModal, useForm } from 'vuestic-ui'
   import { isEqual } from 'lodash';
-  import commands from '@/pages/admin/games/commands'
+  import commands from '@/games/commands'
 
   const { confirm } = useModal()
   const form = useForm('create-game-form')

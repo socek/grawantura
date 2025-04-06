@@ -1,7 +1,7 @@
 <script setup>
   import { onMounted, onUnmounted } from 'vue'
   import useAuthStore from "@/auth/store"
-  import useGamesStore from '@/pages/admin/games/store'
+  import useGamesStore from '@/games/store'
   import useQuestionStore from '@/questions/store'
 
   const gamesStore = useGamesStore()
