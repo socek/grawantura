@@ -20,7 +20,6 @@ export default {
         state.initialized = initialized
       },
       setSession (state, session) {
-        console.log("ss", session, session ? true : false)
         state.session = session
         state.isAuthenticated = session ? true : false
       }

@@ -1,12 +1,11 @@
 import { useToast } from 'vuestic-ui'
-import useGamesStore from './store'
+
 import useAuthStore from "@/auth/store"
 import colors from '@/base/colors'
 import jwtCall from "@/auth/calls"
 
 const GAMES_URL = "/api/games"
 const { init: notify } = useToast()
-const gamesStore = useGamesStore()
 
 export const createGame = async (row) => {
   try {

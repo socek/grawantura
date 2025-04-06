@@ -21,7 +21,7 @@
       <AppLayoutNavigation v-if="!isMobile" class="p-4" />
       <main class="p-4 pt-0">
         <article>
-          <RouterView />
+          <RouterView :key="Route.fullPath" />
         </article>
       </main>
     </template>
@@ -31,7 +31,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useBreakpoint } from 'vuestic-ui'
 
 import { useGlobalStore } from '../stores/global-store'
@@ -50,6 +50,7 @@ const sidebarMinimizedWidth = ref(undefined)
 const isMobile = ref(false)
 const isTablet = ref(false)
 const { isSidebarMinimized } = storeToRefs(GlobalStore)
+const Route = useRouter()
 
 const onResize = () => {
   isSidebarMinimized.value = breakpoints.mdDown

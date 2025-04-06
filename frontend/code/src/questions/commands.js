@@ -57,7 +57,6 @@ const editQuestion = async (row) => {
 }
 
 const deleteQuestion = async (gameId, questionId) => {
-  console.log(gameId, questionId)
   try {
     await jwtCall({
       "url": url(gameId),
