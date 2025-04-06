@@ -8,7 +8,7 @@ const GAMES_URL = "/api/games"
 const { init: notify } = useToast()
 const gamesStore = useGamesStore()
 
-const createGame = async (row) => {
+export const createGame = async (row) => {
   try {
     await jwtCall({
       "url": GAMES_URL,
@@ -31,7 +31,7 @@ const createGame = async (row) => {
   })
 }
 
-const editGame = async (row) => {
+export const editGame = async (row) => {
   try {
     await jwtCall({
       "url": GAMES_URL,
@@ -54,7 +54,7 @@ const editGame = async (row) => {
   })
 }
 
-const deleteGame = async (game_id) => {
+export const deleteGame = async (game_id) => {
   try {
     await jwtCall({
       "url": GAMES_URL,

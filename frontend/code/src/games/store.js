@@ -1,4 +1,3 @@
-
 import { createDefaultState } from '@/base/basestore.js'
 import useGamesStore from './store'
 import useAuthStore from "@/auth/store"

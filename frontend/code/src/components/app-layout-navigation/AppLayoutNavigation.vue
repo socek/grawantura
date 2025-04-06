@@ -66,6 +66,7 @@ const items = computed(() => {
   const result: { label: string; to: string; hasChildren: boolean }[] = []
   route.matched.forEach((route) => {
     const labelKey = findRouteName(route.name as string)
+    console.log(labelKey)
     if (!labelKey) {
       return
     }
