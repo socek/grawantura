@@ -1,12 +1,10 @@
 import { createDefaultState } from '@/base/basestore.js'
-import useGamesStore from './store'
-import useAuthStore from "@/auth/store"
-
+import { gamesUrl } from '@/base/urls'
 import jwtCall from "@/auth/calls"
 
 export default createDefaultState("games", async () => {
   return await jwtCall({
-    url: "/api/games",
+    url: gamesUrl(),
     method: "get",
   })
 })

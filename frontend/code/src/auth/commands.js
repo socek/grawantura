@@ -25,4 +25,3 @@ export const authorize = async (email, password) => {
   }
   return true
 }
-

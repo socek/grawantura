@@ -111,6 +111,14 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        name: 'logout',
+        path: 'logout',
+        component: () => import('@/auth/pages/Logout.vue'),
+        meta: {
+          requiresAuth: true
+        },
+      },
+      {
         name: 'signup',
         path: 'signup',
         component: () => import('../pages/auth/Signup.vue'),

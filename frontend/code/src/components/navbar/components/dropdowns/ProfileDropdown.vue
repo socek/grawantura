@@ -84,7 +84,7 @@ withDefaults(
         list: [
           {
             name: 'logout',
-            to: 'login',
+            to: 'logout',
             icon: 'mso-logout',
           },
         ],

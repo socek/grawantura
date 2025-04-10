@@ -3,14 +3,14 @@ import { useToast } from 'vuestic-ui'
 import useAuthStore from "@/auth/store"
 import colors from '@/base/colors'
 import jwtCall from "@/auth/calls"
+import { gamesUrl } from '@/base/urls'
 
-const GAMES_URL = "/api/games"
 const { init: notify } = useToast()
 
 export const createGame = async (row) => {
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": gamesUrl(),
       "method": "PUT",
       "data": {
         name: row.name
@@ -33,7 +33,7 @@ export const createGame = async (row) => {
 export const editGame = async (row) => {
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": gamesUrl(),
       "method": "PATCH",
       "data": {
         "game_id": row.game_id,
@@ -56,7 +56,7 @@ export const editGame = async (row) => {
 export const deleteGame = async (game_id) => {
   try {
     await jwtCall({
-      "url": GAMES_URL,
+      "url": gamesUrl(),
       "method": "DELETE",
       "data": {
         "game_id": game_id,

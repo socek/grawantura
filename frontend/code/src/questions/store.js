@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from "pinia"
-import { Status } from '@/base/basestore.js'
+import { Status } from '@/base/basestore'
+import { questionsUrl } from '@/base/urls'
 
 import jwtCall from "@/auth/calls"
 
@@ -16,7 +17,7 @@ export default (gameId) => defineStore("questions_" + gameId, () => {
     status.value = Status.Loading
     try {
       const { data, error, reqstatus } = await jwtCall({
-        url: `/api/games/${gameId}/questions`,
+        url: questionsUrl(gameId),
         method: "get",
       })
 
