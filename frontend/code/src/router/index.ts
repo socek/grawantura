@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
+import PlayLayout from '../layouts/PlayLayout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
@@ -97,6 +98,19 @@ const routes: Array<RouteRecordRaw> = [
       //   component: () => import('../pages/faq/FaqPage.vue'),
       // },
     ],
+  },
+  {
+    name: 'play',
+    path: '/play/',
+    component: PlayLayout,
+    redirect: { name: 'intro' },
+    children: [
+      {
+        name: 'intro',
+        path: 'intro',
+        component: () => import('@/play/pages/intro.vue'),
+      },
+    ]
   },
   {
     path: '/auth',

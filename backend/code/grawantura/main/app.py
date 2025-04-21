@@ -13,7 +13,7 @@ SQLALCHEMY_PLUGIN_KEY = "sql"
 class IcecreamPlugin(Plugin):
     key = "icecream"
 
-    def start(self, application: Application):
+    def start(self, application: Application) -> None:
         print("Initializing debug with icecream")
         install()
         ic.configureOutput(includeContext=True, contextAbsPath=True)

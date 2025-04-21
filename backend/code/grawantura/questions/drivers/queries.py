@@ -4,7 +4,6 @@ from uuid import UUID
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Query
 from grawantura.questions.drivers.tables import QuestionTable
 
@@ -25,6 +24,7 @@ def get_questions(
     result = db.execute(stmt)
     for obj in result:
         yield obj[0]._asdict()
+
 
 @Query
 def get_question_by_id(

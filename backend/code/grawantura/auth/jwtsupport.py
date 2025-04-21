@@ -25,6 +25,7 @@ def validate_user_id(request: Request) -> UUID:
         raise HTTPException(status_code=401)
     return validate_user_id_from_token(bearer_token)
 
+
 @AppFun
 @SetInicjator("settings", SettingsInicjator("auth"))
 def validate_user_id_from_token(token, settings: dict = None) -> UUID:

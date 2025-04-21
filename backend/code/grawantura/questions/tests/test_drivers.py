@@ -89,6 +89,7 @@ def test_updating(testdb):
         "is_deleted": None,
     }
 
+
 @DbTest
 def test_empty_updating(testdb):
     testdb = MagicMock()

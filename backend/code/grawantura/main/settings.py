@@ -67,7 +67,7 @@ def logging() -> Settings:
     }
 
 
-def auth():
+def auth() -> Settings:
     return {
         "salt": config("AUTH_SALT", "x").encode("UTF8"),
         "jwt_secret": config("AUTH_JWT_SECRET", "xy").encode("UTF8"),
@@ -87,7 +87,7 @@ def tests() -> Settings:
 
 
 def test_sql() -> Settings:
-    name = config("POSTGRES_DB") + "_tests"
+    name = f"{config('POSTGRES_DB')}_tests"
     user = config("POSTGRES_USER")
     password = config("POSTGRES_PASSWORD")
     host = config("POSTGRES_HOST")

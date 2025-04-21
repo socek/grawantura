@@ -85,6 +85,7 @@ def test_updating(testdb):
         "user_id": new_user_id,
     }
 
+
 @DbTest
 def test_has_access_ok(testdb):
     game_id = uuid4()
@@ -95,6 +96,7 @@ def test_has_access_ok(testdb):
 
     create_game("My Game", game_id=game_id, user_id=user_id, now=now, db=testdb)
     assert has_access(user_id, game_id) is True
+
 
 @DbTest
 def test_has_access_fail(testdb):

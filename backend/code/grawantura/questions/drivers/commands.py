@@ -57,7 +57,7 @@ def update_question(
     filtered = {k: v for k, v in row.items() if v is not None}
     if not filtered:
         return
-    filtered["updated_at"] = now,
+    filtered["updated_at"] = now
     stmt = update(QuestionTable).where(QuestionTable.id == question_id).values(**filtered)
     db.execute(stmt)
 

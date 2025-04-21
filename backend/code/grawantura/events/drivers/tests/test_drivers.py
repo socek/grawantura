@@ -24,10 +24,13 @@ def test_events_before(testdb):
         now,
         db=testdb,
     )
-    assert list(get_events(now - timedelta(seconds=1), db=testdb)) == [{
-        "created_at": now,
-        "payload": payload,
-    }]
+    assert list(get_events(now - timedelta(seconds=1), db=testdb)) == [
+        {
+            "created_at": now,
+            "payload": payload,
+        }
+    ]
+
 
 @DbTest
 def test_events_at_time(testdb):
@@ -40,10 +43,13 @@ def test_events_at_time(testdb):
         now,
         db=testdb,
     )
-    assert list(get_events(now, db=testdb)) == [{
-        "created_at": now,
-        "payload": payload,
-    }]
+    assert list(get_events(now, db=testdb)) == [
+        {
+            "created_at": now,
+            "payload": payload,
+        }
+    ]
+
 
 @DbTest
 def test_events_after(testdb):

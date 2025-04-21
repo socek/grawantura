@@ -1,10 +1,8 @@
-from datetime import datetime
-from uuid import uuid4
+from typing import Any
 
 from qq.finder import ObjectFinder
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.schema import MetaData
@@ -23,9 +21,9 @@ metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
 
 class Base:
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    id = Column(UUID(as_uuid=True), primary_key=True, unique=True, nullable=False)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
     def _asdict(self):
         data = dict(self.__dict__)
@@ -34,7 +32,7 @@ class Base:
 
 
 class TableFinder(ObjectFinder):
-    def is_collectable(self, element: object):
+    def is_collectable(self, element: Any) -> bool:
         try:
             return issubclass(element, SqlTable) and element != SqlTable
         except TypeError:

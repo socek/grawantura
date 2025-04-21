@@ -16,6 +16,7 @@ def sanitize(data: dict):
         sanitized[key] = sanizite_value(value)
     return sanitized
 
+
 def sanizite_value(value):
     if isinstance(value, UUID):
         return value.hex
@@ -26,6 +27,7 @@ def sanizite_value(value):
     if isinstance(value, Iterable) and not isinstance(value, str):
         return [sanizite_value(element) for element in value]
     return value
+
 
 def WebEndpoint(fun):
     @wraps(fun)

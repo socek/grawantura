@@ -43,18 +43,16 @@ def get_games(
         elements.append(game[0]._asdict())
     return elements
 
+
 @Query
 def has_access(user_id: UUID, game_id: UUID, db: Session = None) -> bool:
     """
     Check if user hase access to the game.
     """
-    stmt = (
-        select(GameTable.id)
-        .filter(
-            GameTable.id == game_id,
-            GameTable.user_id == user_id,
-            GameTable.is_deleted.isnot(True),
-        )
+    stmt = select(GameTable.id).filter(
+        GameTable.id == game_id,
+        GameTable.user_id == user_id,
+        GameTable.is_deleted.isnot(True),
     )
     obj = db.execute(stmt).first()
     if obj:
