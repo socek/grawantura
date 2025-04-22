@@ -83,4 +83,5 @@ pytest = "^8.3.5"
 pytest-cov = "^6.0.0"
 pytest-async = "^0.1.1"
 pytest-asyncio = "^0.25.3"
+momake = "^0.1.0"
 

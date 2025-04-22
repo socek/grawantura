@@ -20,7 +20,7 @@
   const Router = useRouter()
 
   const gamesStore = useGamesStore()
-  const props = defineProps(['gameId'])
+  const props = defineProps(['gameId', 'routeName'])
 
   const value = ref()
   const options = computed(() => {
@@ -40,7 +40,7 @@
     return result
   })
   const onUpdate = (event) => {
-    Router.push({ name: 'questions', params: { gameId: event.value } })
+    Router.push({ name: props.routeName, params: { gameId: event.value } })
   }
   onMounted(async () => {
     await gamesStore.fetch()

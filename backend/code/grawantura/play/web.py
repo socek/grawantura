@@ -7,35 +7,33 @@ from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.commands import add_event
 from grawantura.games.webhelpers import validate_game_id
 from grawantura.main.web import WebEndpoint
-from grawantura.questions.drivers import commands
-from grawantura.questions.drivers import queries
+from grawantura.play.drivers import commands
+from grawantura.play.drivers import queries
 
 
 @WebEndpoint
-async def question_list(request: Request) -> dict:
+async def play_list(request: Request) -> dict:
     user_id = validate_user_id(request)
     game_id = validate_game_id(request, user_id)
     return {
-        "items": list(queries.get_questions(game_id)),
+        "items": queries.get_plays(game_id),
     }
 
 
 @WebEndpoint
-async def create_question(request):
+async def create_play(request) -> dict:
     user_id = validate_user_id(request)
     game_id = validate_game_id(request, user_id)
 
     payload = await request.json()
-    commands.create_question(
-        question=payload["question"],
-        answer=payload["answer"],
-        hints=payload["hints"],
+    commands.create_play(
+        name=payload["name"],
         game_id=game_id,
     )
     add_event(
         {
             "type": "refresh",
-            "group": "questions",
+            "group": "plays",
             "game_id": game_id,
         }
     )
@@ -45,21 +43,19 @@ async def create_question(request):
 
 
 @WebEndpoint
-async def update_question(request: Request) -> dict:
+async def update_play(request: Request) -> dict:
     user_id = validate_user_id(request)
     game_id = validate_game_id(request, user_id)
 
     payload = await request.json()
-    commands.update_question(
-        question_id=payload["question_id"],
-        question=payload["question"],
-        answer=payload["answer"],
-        hints=payload["hints"],
+    commands.update_play(
+        play_id=payload["play_id"],
+        name=payload["name"],
     )
     add_event(
         {
             "type": "refresh",
-            "group": "questions",
+            "group": "plays",
             "game_id": game_id,
         }
     )
@@ -69,19 +65,18 @@ async def update_question(request: Request) -> dict:
 
 
 @WebEndpoint
-async def delete_question(request: Request) -> dict:
+async def delete_play(request: Request) -> dict:
     user_id = validate_user_id(request)
     game_id = validate_game_id(request, user_id)
 
     payload = await request.json()
-    ic(payload)
-    commands.delete_question(
-        question_id=payload["question_id"],
+    commands.delete_play(
+        play_id=payload["play_id"],
     )
     add_event(
         {
             "type": "refresh",
-            "group": "questions",
+            "group": "plays",
             "game_id": game_id,
         }
     )
@@ -90,8 +85,8 @@ async def delete_question(request: Request) -> dict:
     }
 
 
-def get_routes(prefix: str) -> Generator[Route, None, None]:
-    yield Route(prefix, question_list, methods=["GET"])
-    yield Route(prefix, create_question, methods=["PUT"])
-    yield Route(prefix, update_question, methods=["PATCH"])
-    yield Route(prefix, delete_question, methods=["DELETE"])
+def get_routes(prefix: str) -> Generator[Route]:
+    yield Route(prefix, play_list, methods=["GET"])
+    yield Route(prefix, create_play, methods=["PUT"])
+    yield Route(prefix, update_play, methods=["PATCH"])
+    yield Route(prefix, delete_play, methods=["DELETE"])

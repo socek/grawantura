@@ -2,23 +2,20 @@
 import { computed, onMounted, ref } from 'vue'
 
 import { Status } from '@/base/basestore'
-import useGamesStore from '@/games/store'
+import usePlayStore from '@/play/store.js'
 
-import editGameForm from '@/games/widgets/editGame.vue'
-import deleteGameForm from '@/games/widgets/deleteGame.vue'
-import goToQuestions from '@/games/widgets/goToQuestions.vue'
-import goToPlays from '@/games/widgets/goToPlays.vue'
+import editPlayForm from '@/play/widgets/editPlay.vue'
+import deletePlayForm from '@/play/widgets/deletePlay.vue'
 
-const gamesStore = useGamesStore()
-
-const props = defineProps(['nameFilter'])
+const props = defineProps(['gameId', 'playFilter'])
+const playStore = usePlayStore(props.gameId)()
 
 onMounted(async () => {
-  await gamesStore.fetch()
+  await playStore.fetch()
 })
 
 const isLoading = computed(() => {
-  return [Status.BeforeLoad, Status.Loading].indexOf(gamesStore.getStatus) != -1
+  return [Status.BeforeLoad, Status.Loading].indexOf(playStore.status) != -1
 })
 
 const columns = [
@@ -27,9 +24,9 @@ const columns = [
 ]
 
 const perPage = ref(10)
-const games = computed(() => {
-  return gamesStore.items.filter(item => {
-    return item.name.toLowerCase().indexOf(props.nameFilter.toLowerCase()) > -1
+const plays = computed(() => {
+  return playStore.items.filter(item => {
+    return item.name.toLowerCase().indexOf(props.playFilter.toLowerCase()) > -1
   })
 })
 const pageNumber = ref(1)
@@ -41,7 +38,7 @@ const totalPages = computed(() => 1)
   <div>
     <VaDataTable
       :columns="columns"
-      :items="games"
+      :items="plays"
       :loading="isLoading"
     >
       <template #cell(name)="{ rowData }">
@@ -52,10 +49,8 @@ const totalPages = computed(() => 1)
 
       <template #cell(actions)="{ rowData }">
         <div class="flex gap-2 justify-end">
-          <editGameForm :item_id="rowData.id" />
-          <deleteGameForm :item_id="rowData.id" :name="rowData.name" />
-          <goToQuestions :gameId="rowData.id" />
-          <goToPlays :gameId="rowData.id" />
+          <editPlayForm :itemId="rowData.id" :gameId="props.gameId" />
+          <deletePlayForm :itemId="rowData.id" :gameId="props.gameId" :name="rowData.name" />
         </div>
       </template>
 

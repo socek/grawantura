@@ -3,6 +3,7 @@
   import useAuthStore from "@/auth/store"
   import useGamesStore from '@/games/store'
   import useQuestionStore from '@/questions/store'
+  import usePlayStore from '@/play/store'
 
   const gamesStore = useGamesStore()
 
@@ -24,6 +25,9 @@
       } else if(payload["payload"]["group"] == "questions") {
         const gameId = payload["payload"]["game_id"]
         await useQuestionStore(gameId)().fetch(true)
+      } else if(payload["payload"]["group"] == "plays") {
+        const gameId = payload["payload"]["game_id"]
+        await usePlayStore(gameId)().fetch(true)
       } else {
         console.log("Unknow refresh", payload);
       }

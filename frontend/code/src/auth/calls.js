@@ -1,9 +1,13 @@
 import axios from 'axios'
+import colors from '@/base/colors'
+import { useToast } from 'vuestic-ui'
 import { DEFAULT_UNAUTHORIZE_ROUTE } from "@/base/consts"
 import useAuthStore from "@/auth/store"
 import Router from "@/router"
 
-export default async (request) => {
+const { init: notify } = useToast()
+
+export const jwtCall = async (request) => {
   const authStore = useAuthStore()
   request["headers"] = request["headers"] || {}
   request["headers"]["auth_token"] = authStore.getToken
@@ -17,3 +21,24 @@ export default async (request) => {
     throw error
   }
 }
+
+export const jwtCallWithErrorHandling = async (options, texts) => {
+  let result;
+  try {
+    result = await jwtCall(options)
+  } catch(error) {
+    notify({
+      message: texts.failed,
+      color: colors.fail,
+    })
+    throw error
+  }
+
+  notify({
+    message: texts.success,
+    color: colors.success,
+  })
+  return result;
+}
+
+export default jwtCall;

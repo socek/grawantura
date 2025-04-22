@@ -6,6 +6,7 @@ from grawantura.events.ws import get_routes as events_ws_routes
 from grawantura.games.web import get_routes as games_routes
 from grawantura.home.web import get_routes as home_routes
 from grawantura.main.globals import app
+from grawantura.play.web import get_routes as play_routes
 from grawantura.questions.web import get_routes as question_routes
 
 
@@ -17,6 +18,7 @@ def get_routes():
         + list(auth_routes("/auth"))
         + list(events_ws_routes("/ws"))
         + list(question_routes("/games/{game_id}/questions"))
+        + list(play_routes("/games/{game_id}/plays"))
     )
 
 

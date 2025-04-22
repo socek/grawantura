@@ -1,6 +1,7 @@
 from subprocess import Popen
 
 from momake.dependency import FileDependency
+from momake.exceptions import TaskFailed
 from momake.task import Task
 
 
@@ -19,4 +20,5 @@ class MountQQ(Task):
             "/home/socek/projects/sapp/qq",
             "backend/code/qq",
         ]
-        Popen(cmd).wait()
+        if Popen(cmd).wait() != 0:
+            raise TaskFailed(self.name)

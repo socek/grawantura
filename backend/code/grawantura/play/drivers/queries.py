@@ -1,4 +1,3 @@
-from typing import Generator
 from typing import Optional
 from uuid import UUID
 
@@ -29,7 +28,7 @@ def get_play_by_id(
 def get_plays(
     game_id: UUID,
     db: Optional[Session] = None,
-) -> Generator[dict, None, None]:
+) -> list[dict]:
     assert db
     stmt = (
         select(PlayTable)
@@ -40,5 +39,4 @@ def get_plays(
         )
     )
     result = db.execute(stmt)
-    for play in result:
-        yield play[0]._asdict()
+    return [row[0]._asdict() for row in result]

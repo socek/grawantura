@@ -4,6 +4,7 @@ from subprocess import Popen
 from uuid import UUID
 
 from momake.dependency import Dependency
+from momake.exceptions import TaskFailed
 from momake.task import Task
 from momaketasks.mount import MountQQ
 
@@ -11,6 +12,7 @@ from momaketasks.mount import MountQQ
 def docker(args: list):
     cmd = ["/usr/bin/docker-compose"] + args
     with Popen(cmd, stdout=PIPE) as proc:
+        assert proc.stdout
         return proc.stdout.read().decode("utf8")
 
 
@@ -71,4 +73,5 @@ class DockerUpTask(Task):
 
     def action(self):
         cmd = ["/usr/bin/docker-compose", "up", "-d"]
-        Popen(cmd).wait()
+        if Popen(cmd).wait() != 0:
+            raise TaskFailed(self.name)
