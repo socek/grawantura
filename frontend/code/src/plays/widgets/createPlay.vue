@@ -3,7 +3,7 @@
   import { validators } from '@/services/utils'
   import { useModal, useForm } from 'vuestic-ui'
   import { isEqual } from 'lodash';
-  import commands from "@/play/commands"
+  import commands from "@/plays/commands"
 
   const props = defineProps(['gameId'])
   const { confirm } = useModal()

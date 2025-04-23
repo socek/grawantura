@@ -2,8 +2,8 @@
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import gameSelect from '@/questions/widgets/gameSelect.vue'
-  import ItemTable from '@/play/components/PlayTable.vue'
-  import createPlayForm from '@/play/widgets/createPlay.vue'
+  import ItemTable from '@/plays/components/PlayTable.vue'
+  import createPlayForm from '@/plays/widgets/createPlay.vue'
 
   const route = useRoute()
   const playFilter = ref("")

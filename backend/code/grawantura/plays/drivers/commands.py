@@ -9,7 +9,7 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from grawantura.main.globals import Command
-from grawantura.play.drivers.tables import PlayTable
+from grawantura.plays.drivers.tables import PlayTable
 
 
 @Command

@@ -3,7 +3,7 @@
   import useAuthStore from "@/auth/store"
   import useGamesStore from '@/games/store'
   import useQuestionStore from '@/questions/store'
-  import usePlayStore from '@/play/store'
+  import usePlayStore from '@/plays/store'
 
   const gamesStore = useGamesStore()
 

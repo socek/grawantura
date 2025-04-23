@@ -1,6 +1,6 @@
 <script setup>
   import { useModal } from 'vuestic-ui'
-  import commands from "@/play/commands"
+  import commands from "@/plays/commands"
 
   const props = defineProps(['gameId', 'itemId', 'name'])
   const { confirm } = useModal()

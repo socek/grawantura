@@ -3,7 +3,7 @@ from uuid import UUID
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
 
-from grawantura.play.drivers.queries import has_access
+from grawantura.plays.drivers.queries import has_access
 
 
 def validate_play_id(request: Request, user_id: UUID) -> UUID:

@@ -2,11 +2,11 @@
 import { computed, onMounted, ref } from 'vue'
 
 import { Status } from '@/base/basestore'
-import usePlayStore from '@/play/store.js'
+import usePlayStore from '@/plays/store.js'
 
-import editPlayForm from '@/play/widgets/editPlay.vue'
-import deletePlayForm from '@/play/widgets/deletePlay.vue'
-import goToPlayDashboard from '@/play/widgets/goToPlayDashboard.vue'
+import editPlayForm from '@/plays/widgets/editPlay.vue'
+import deletePlayForm from '@/plays/widgets/deletePlay.vue'
+import goToPlayDashboard from '@/plays/widgets/goToPlayDashboard.vue'
 
 const props = defineProps(['gameId', 'playFilter'])
 const playStore = usePlayStore(props.gameId)()

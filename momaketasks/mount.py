@@ -1,14 +1,17 @@
+from pathlib import Path
 from subprocess import Popen
 
 from momake.dependency import FileDependency
 from momake.exceptions import TaskFailed
 from momake.task import Task
 
+root = Path(__file__).parent.parent
+qqpath = str(root / "backend" / "code" / "qq")
 
 class MountQQ(Task):
     name = "MountQQ"
     dependecies = [
-        FileDependency("backend/code/qq/", "__init__.py"),
+        FileDependency(qqpath, "__init__.py"),
     ]
 
     def action(self):
@@ -18,7 +21,7 @@ class MountQQ(Task):
             "-o",
             "bind",
             "/home/socek/projects/sapp/qq",
-            "backend/code/qq",
+            qqpath,
         ]
         if Popen(cmd).wait() != 0:
             raise TaskFailed(self.name)

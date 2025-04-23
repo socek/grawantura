@@ -7,8 +7,8 @@ from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.commands import add_event
 from grawantura.games.webhelpers import validate_game_id
 from grawantura.main.web import WebEndpoint
-from grawantura.play.drivers import commands
-from grawantura.play.drivers import queries
+from grawantura.plays.drivers import commands
+from grawantura.plays.drivers import queries
 
 
 @WebEndpoint

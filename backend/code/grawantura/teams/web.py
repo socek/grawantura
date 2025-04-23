@@ -6,7 +6,7 @@ from starlette.routing import Route
 from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.commands import add_event
 from grawantura.main.web import WebEndpoint
-from grawantura.play.webhelpers import validate_play_id
+from grawantura.plays.webhelpers import validate_play_id
 from grawantura.teams.drivers import commands
 from grawantura.teams.drivers import queries
 

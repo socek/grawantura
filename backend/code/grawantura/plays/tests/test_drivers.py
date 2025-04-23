@@ -4,12 +4,12 @@ from uuid import uuid4
 
 from grawantura.games.drivers.commands import create_game
 from grawantura.main.testing import DbTest
-from grawantura.play.drivers.commands import create_play
-from grawantura.play.drivers.commands import delete_play
-from grawantura.play.drivers.commands import update_play
-from grawantura.play.drivers.queries import get_play_by_id
-from grawantura.play.drivers.queries import get_plays
-from grawantura.play.drivers.queries import has_access
+from grawantura.plays.drivers.commands import create_play
+from grawantura.plays.drivers.commands import delete_play
+from grawantura.plays.drivers.commands import update_play
+from grawantura.plays.drivers.queries import get_play_by_id
+from grawantura.plays.drivers.queries import get_plays
+from grawantura.plays.drivers.queries import has_access
 
 
 @DbTest

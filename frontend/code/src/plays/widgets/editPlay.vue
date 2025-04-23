@@ -3,8 +3,8 @@
   import { validators } from '@/services/utils'
   import { useModal, useForm } from 'vuestic-ui'
   import { isEqual } from 'lodash';
-  import usePlayStore from '@/play/store'
-  import commands from "@/play/commands"
+  import usePlayStore from '@/plays/store'
+  import commands from "@/plays/commands"
 
   const props = defineProps(['gameId', 'itemId'])
   const playStore = usePlayStore(props.gameId)()

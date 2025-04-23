@@ -47,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'plays',
         path: 'games/:gameId/plays',
-        component: () => import('@/play/pages/PlayList.vue'),
+        component: () => import('@/plays/pages/PlayList.vue'),
         meta: {
           requiresAuth: true
         }
@@ -116,7 +116,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'intro',
         path: '',
-        component: () => import('@/play/pages/intro.vue'),
+        component: () => import('@/plays/pages/intro.vue'),
       },
     ]
   },

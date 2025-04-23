@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Query
-from grawantura.play.drivers.tables import PlayTable
+from grawantura.plays.drivers.tables import PlayTable
 
 
 @Query
