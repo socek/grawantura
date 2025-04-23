@@ -4,6 +4,7 @@ from uuid import UUID
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
+from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Query
 from grawantura.play.drivers.tables import PlayTable
 
@@ -40,3 +41,26 @@ def get_plays(
     )
     result = db.execute(stmt)
     return [row[0]._asdict() for row in result]
+
+
+@Query
+def has_access(
+    user_id: UUID,
+    play_id: UUID,
+    db: Optional[Session] = None,
+) -> bool:
+    """
+    Check if user hase access to the game.
+    """
+    assert db
+    stmt = (
+        select(GameTable.id)
+        .join(PlayTable, PlayTable.game_id == GameTable.id)
+        .filter(
+            GameTable.user_id == user_id,
+            GameTable.is_deleted.isnot(True),
+            PlayTable.id == play_id,
+        )
+    )
+    obj = db.execute(stmt).first()
+    return True if obj else False

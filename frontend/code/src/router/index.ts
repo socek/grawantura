@@ -108,14 +108,14 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
-    name: 'play',
-    path: '/play/',
+    name: 'playDashboard',
+    path: '/play/:playId',
     component: PlayLayout,
     redirect: { name: 'intro' },
     children: [
       {
         name: 'intro',
-        path: 'intro',
+        path: '',
         component: () => import('@/play/pages/intro.vue'),
       },
     ]

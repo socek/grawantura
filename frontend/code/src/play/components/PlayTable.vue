@@ -6,6 +6,7 @@ import usePlayStore from '@/play/store.js'
 
 import editPlayForm from '@/play/widgets/editPlay.vue'
 import deletePlayForm from '@/play/widgets/deletePlay.vue'
+import goToPlayDashboard from '@/play/widgets/goToPlayDashboard.vue'
 
 const props = defineProps(['gameId', 'playFilter'])
 const playStore = usePlayStore(props.gameId)()
@@ -51,6 +52,7 @@ const totalPages = computed(() => 1)
         <div class="flex gap-2 justify-end">
           <editPlayForm :itemId="rowData.id" :gameId="props.gameId" />
           <deletePlayForm :itemId="rowData.id" :gameId="props.gameId" :name="rowData.name" />
+          <goToPlayDashboard :itemId="rowData.id" />
         </div>
       </template>
 
