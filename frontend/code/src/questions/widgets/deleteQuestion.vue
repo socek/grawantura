@@ -19,12 +19,15 @@
 
 <template>
   <div class="flex gap-2 justify-end">
-    <VaButton
-      preset="primary"
-      size="small"
-      icon="mso-delete"
-      aria-label="Delete user"
-      @click="onDelete()"
-    />
+    <VaPopover message="Delete user">
+      <VaButton
+        color="danger"
+        size="small"
+        aria-label="Delete user"
+        @click="onDelete()"
+      >
+        <VaIcon name="delete" />
+      </VaButton>
+    </VaPopover>
   </div>
 </template>

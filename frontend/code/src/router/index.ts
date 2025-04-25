@@ -53,6 +53,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        name: 'playDashboard',
+        path: '/playdashboard/:playId',
+        component: () => import("@/plays/pages/PlayDashboard.vue"),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),
@@ -108,7 +116,7 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
-    name: 'playDashboard',
+    name: 'playPages',
     path: '/play/:playId',
     component: PlayLayout,
     redirect: { name: 'intro' },

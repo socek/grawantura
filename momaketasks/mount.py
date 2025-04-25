@@ -8,6 +8,7 @@ from momake.task import Task
 root = Path(__file__).parent.parent
 qqpath = str(root / "backend" / "code" / "qq")
 
+
 class MountQQ(Task):
     name = "MountQQ"
     dependecies = [

@@ -1,8 +1,8 @@
 <script setup>
   import { useModal } from 'vuestic-ui'
-  import commands from "@/plays/commands"
+  import commands from "@/teams/commands"
 
-  const props = defineProps(['gameId', 'itemId', 'name'])
+  const props = defineProps(['playId', 'itemId', 'name'])
   const { confirm } = useModal()
 
   const onDelete = async () => {
@@ -12,7 +12,7 @@
       size: 'small',
     })
     if (agreed) {
-      await commands.deletePlay(props.gameId, props.itemId)
+      await commands.deleteTeam(props.playId, props.itemId)
     }
   }
 </script>

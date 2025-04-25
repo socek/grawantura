@@ -54,14 +54,17 @@
 </script>
 
 <template>
-  <div >
-    <VaButton
-      preset="primary"
-      size="small"
-      icon="mso-edit"
-      aria-label="Edit user"
-      @click="showDialog()"
-    />
+  <div>
+    <VaPopover message="Edit play">
+      <VaButton
+        preset="primary"
+        size="small"
+        aria-label="Edit play"
+        @click="showDialog()"
+      >
+        <VaIcon name="edit" />
+      </VaButton>
+    </VaPopover>
 
     <VaModal
       v-model="isVisible"

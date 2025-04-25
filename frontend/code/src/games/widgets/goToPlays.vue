@@ -8,13 +8,19 @@
 </script>
 
 <template>
-  <div >
-    <VaButton
-      preset="primary"
-      size="small"
-      icon="star"
-      aria-label="Go To Questions"
-      @click="onClick"
-    />
+  <div>
+    <VaPopover message="Go To Plays">
+      <VaButton
+        preset="primary"
+        color="success"
+        size="small"
+        aria-label="Go To Plays"
+        @click="onClick"
+      >
+        <VaIcon class="material-icons">
+          play_circle_filled
+        </VaIcon>
+      </VaButton>
+    </VaPopover>
   </div>
 </template>
