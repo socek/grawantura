@@ -1,7 +1,6 @@
-import { useToast } from 'vuestic-ui'
 import colors from '@/base/colors'
 import { jwtCallWithErrorHandling } from "@/auth/calls"
-import { playsUrl } from '@/base/urls'
+import { playsUrl, hostUrl } from '@/base/urls'
 
 export const createPlay = async (row) => {
   return await jwtCallWithErrorHandling(
@@ -53,8 +52,35 @@ export const deletePlay = async (gameId, playId) => {
   )
 }
 
+export const drawQuestion = async (playId) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "draw_question"),
+      "method": "POST",
+    },
+    {
+      "failed": "Draw failed.",
+    },
+    (result, notify) => {
+      if(result.data.status == "fail") {
+        notify({
+          message: `Draw failed: ${result.data.description}.`,
+          color: colors.fail,
+        })
+      } else {
+        notify({
+          message: "Draw succeed!",
+          color: colors.success,
+        })
+      }
+      return result
+    }
+  )
+}
+
 export default {
   createPlay,
   updatePlay,
   deletePlay,
+  drawQuestion,
 }

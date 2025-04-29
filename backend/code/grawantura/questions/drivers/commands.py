@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 from uuid import uuid4
 
@@ -32,7 +33,6 @@ def create_question(
         "created_at": now,
         "updated_at": now,
     }
-    ic(row)
     stmt = insert(QuestionTable).values([row])
     db.execute(stmt)
 
@@ -40,12 +40,12 @@ def create_question(
 @Command
 def update_question(
     question_id: UUID,
-    question: str = None,
-    answer: str = None,
-    hints: str = None,
-    game_id: UUID = None,
-    now: datetime = None,
-    db: Session = None,
+    question: Optional[str] = None,
+    answer: Optional[str] = None,
+    hints: Optional[str] = None,
+    game_id: Optional[UUID] = None,
+    now: Optional[datetime] = None,
+    db: Optional[Session] = None,
 ):
     now = now or datetime.now()
     row = {

@@ -24,6 +24,11 @@ export default (playId) => defineStore("teams_" + playId, () => {
       if (error && reqstatus !== 406) throw error
       if (data) {
         items.value = data.items
+        items.value.forEach((item, index) => {
+          item["money"] = 5000
+          item["auctioned"] = 0
+          item["addon"] = 0
+        })
         status.value = Status.Completed
       } else {
         status.value = Status.Failed
@@ -32,6 +37,7 @@ export default (playId) => defineStore("teams_" + playId, () => {
       status.value = Status.Failed
     }
   }
+
   return {
     items,
     status,

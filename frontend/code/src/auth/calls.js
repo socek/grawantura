@@ -22,7 +22,7 @@ export const jwtCall = async (request) => {
   }
 }
 
-export const jwtCallWithErrorHandling = async (options, texts) => {
+export const jwtCallWithErrorHandling = async (options, texts, parseData) => {
   let result;
   try {
     result = await jwtCall(options)
@@ -33,12 +33,15 @@ export const jwtCallWithErrorHandling = async (options, texts) => {
     })
     throw error
   }
-
-  notify({
-    message: texts.success,
-    color: colors.success,
-  })
-  return result;
+  if(parseData) {
+    return parseData(result, notify)
+  } else {
+    notify({
+      message: texts.success,
+      color: colors.success,
+    })
+    return result;
+  }
 }
 
 export default jwtCall;

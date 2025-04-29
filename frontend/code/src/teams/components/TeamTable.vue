@@ -10,19 +10,47 @@ import deleteTeamForm from '@/teams/widgets/deleteTeam.vue'
 const props = defineProps(['playId'])
 const teamStore = useTeamStore(props.playId)()
 
-onMounted(async () => await teamStore.fetch())
 
 const isLoading = computed(() => [Status.BeforeLoad, Status.Loading].indexOf(teamStore.status) != -1)
 
 const columns = [
-  { label: 'Name', key: 'name', sortable: true },
+  { label: 'Name', key: 'name' },
+  { label: 'Posiadane', key: 'money' },
+  { label: 'Zalicytowane', key: 'auctioned' },
+  { label: 'Dodatek', key: 'addon' },
   { label: ' ', key: 'actions', align: 'right' },
 ]
 
-const perPage = ref(10)
 const teams = computed(() => teamStore.items)
-const pageNumber = ref(1)
-const totalPages = computed(() => 1)
+
+onMounted(async () => {
+  await teamStore.fetch()
+})
+
+const adminScoresMoney = ref(0);
+const adminScoresAddon = ref(0);
+const adminScoresAuctioned = computed(() => {
+  let sum = 0
+  sum += parseInt(adminScoresMoney.value) || 0
+  sum += parseInt(adminScoresAddon.value) || 0
+  teamStore.items.forEach((team, index) => {
+    sum += parseInt(team.auctioned) || 0
+  })
+  return sum
+});
+
+const isGreatest = (id) => {
+  let greatestId = null
+  let greatestValue = 0
+  teamStore.items.forEach((team, index) => {
+    const value = parseInt(team.auctioned) || 0
+    if(value > greatestValue) {
+      greatestValue = value
+      greatestId = team.id
+    }
+  })
+  return greatestId == id
+}
 
 </script>
 
@@ -46,33 +74,64 @@ const totalPages = computed(() => 1)
         </div>
       </template>
 
+      <template #cell(money)="{ rowData }">
+        <div class="flex gap-2 justify-end">
+          <VaInput
+            readonly
+            v-model="rowData.money"
+          />
+        </div>
+      </template>
+
+      <template #cell(auctioned)="{ rowData }">
+        <div class="flex gap-2 justify-end">
+          <VaInput
+            :success="isGreatest(rowData.id)"
+            v-model="rowData.auctioned"
+          />
+        </div>
+      </template>
+
+      <template #cell(addon)="{ rowData }">
+        <div class="flex gap-2 justify-end">
+          <VaInput
+            v-model="rowData.addon"
+          />
+        </div>
+      </template>
+
+      <template #headerPrepend>
+        <tr class="table-crud__slot">
+          <th class="p-1">
+            Pula
+          </th>
+          <th class="p-1">
+            <VaInput
+              readonly
+              v-model="adminScoresMoney"
+            />
+          </th>
+          <th class="p-1">
+            <VaInput
+              readonly
+              v-model="adminScoresAuctioned"
+            />
+          </th>
+          <th class="p-1">
+            <VaInput
+              v-model="adminScoresAddon"
+            />
+          </th>
+          <th class="p-1">
+            <VaButton block>
+              Koniec Licytacji
+            </VaButton>
+          </th>
+        </tr>
+      </template>
+
     </VaDataTable>
 
-    <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
-      <div>
-        <b>{{ totalPages }} results.</b>
-        Results per page
-        <VaSelect v-model="perPage" class="!w-20" :options="[10, 50, 100]" />
-      </div>
-
-      <div v-if="totalPages > 1" class="flex">
-        <VaButton
-          preset="secondary"
-          icon="va-arrow-left"
-          aria-label="Previous page"
-          :disabled="pageNumber === 1"
-          @click="pageNumber--"
-        />
-        <VaButton
-          class="mr-2"
-          preset="secondary"
-          icon="va-arrow-right"
-          aria-label="Next page"
-          :disabled="pageNumber === totalPages"
-          @click="pageNumber++"
-        />
-      </div>
-    </div>
   </div>
 </template>
 

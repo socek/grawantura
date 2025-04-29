@@ -9,6 +9,8 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from grawantura.main.globals import Command
+from grawantura.plays.drivers.tables import EventTypenames
+from grawantura.plays.drivers.tables import PlayEventTable
 from grawantura.plays.drivers.tables import PlayTable
 
 
@@ -68,3 +70,29 @@ def delete_play(
     stmt = stmt.where(PlayTable.id == play_id)
     stmt = stmt.values({"is_deleted": True})
     db.execute(stmt)
+
+
+@Command
+def draw_question(
+    play_id: UUID,
+    question_id: UUID,
+    event_id: Optional[UUID] = None,
+    now: Optional[datetime] = None,
+    db: Optional[Session] = None,
+):
+    assert db
+    event_id = event_id or uuid4()
+    now = now or datetime.now()
+    row = {
+        "id": event_id,
+        "created_at": now,
+        "updated_at": now,
+        "play_id": play_id,
+        "question_id": question_id,
+        "typename": EventTypenames.question_draw.value,
+    }
+    stmt = insert(PlayEventTable).values([row])
+    db.execute(stmt)
+    # get questions that are avalible (remove alredy used)
+    # draw
+    # return question_id

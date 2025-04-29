@@ -6,10 +6,14 @@ from grawantura.games.drivers.commands import create_game
 from grawantura.main.testing import DbTest
 from grawantura.plays.drivers.commands import create_play
 from grawantura.plays.drivers.commands import delete_play
+from grawantura.plays.drivers.commands import draw_question
 from grawantura.plays.drivers.commands import update_play
+from grawantura.plays.drivers.queries import current_question
 from grawantura.plays.drivers.queries import get_play_by_id
 from grawantura.plays.drivers.queries import get_plays
 from grawantura.plays.drivers.queries import has_access
+from grawantura.plays.drivers.queries import list_unused_questions
+from grawantura.questions.drivers.commands import create_question
 
 
 @DbTest
@@ -136,3 +140,40 @@ def test_has_access_when_same_user(testdb):
     create_play("play", play_id=play_id, game_id=game_id, db=testdb)
 
     assert has_access(user_id, play_id) is True
+
+
+@DbTest
+def test_list_unused_questions(testdb):
+    game_id = uuid4()
+    user_id = uuid4()
+    play_id = uuid4()
+    question_id = uuid4()
+    question_id2 = uuid4()
+
+    create_game("game", game_id, user_id, db=testdb)
+    create_question("question", "", "", game_id=game_id, question_id=question_id, db=testdb)
+    create_question("question2", "", "", game_id=game_id, question_id=question_id2, db=testdb)
+    create_play("play", play_id=play_id, game_id=game_id, db=testdb)
+    draw_question(play_id, question_id, db=testdb)
+
+    result = list_unused_questions(play_id, db=testdb)
+    assert result == [question_id2]
+
+@DbTest
+def test_current_question(testdb):
+    game_id = uuid4()
+    user_id = uuid4()
+    play_id = uuid4()
+    question_id = uuid4()
+    question_id2 = uuid4()
+
+    create_game("game", game_id, user_id, db=testdb)
+    create_question("question", "", "", game_id=game_id, question_id=question_id, db=testdb)
+    create_question("question2", "", "", game_id=game_id, question_id=question_id2, db=testdb)
+    create_play("play", play_id=play_id, game_id=game_id, db=testdb)
+    draw_question(play_id, question_id, db=testdb)
+    draw_question(play_id, question_id2, db=testdb)
+
+    result = current_question(play_id)
+    assert result
+    assert result["id"] == question_id2
