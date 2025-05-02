@@ -5,7 +5,7 @@
   import useQuestionStore from '@/questions/store'
   import usePlayStore from '@/plays/store'
   import useTeamStore from '@/teams/store'
-  import useHostStore from "@/plays/hoststore"
+  import { useHostQuestionStore, useHostViewStore } from "@/plays/hoststore"
 
   const gamesStore = useGamesStore()
 
@@ -42,7 +42,10 @@
       const payload = data["payload"]
       if(payload["name"] == "draw_question") {
         const playId = payload["play_id"]
-        await useHostStore(playId)().fetchQuestion(true)
+        await useHostQuestionStore(playId)().fetchQuestion(true)
+      } else if(payload["name"] == "change_view") {
+        const playId = payload["play_id"]
+        await useHostViewStore(playId)().fetch(true)
       } else {
         console.log("Unknown host action", data)
       }

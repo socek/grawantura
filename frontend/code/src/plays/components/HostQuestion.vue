@@ -1,21 +1,21 @@
 <script setup>
   import { computed, onMounted, ref } from 'vue'
   import { Status } from '@/base/basestore'
-  import useHostStore from "@/plays/hoststore"
+  import { useHostQuestionStore } from "@/plays/hoststore"
   const props = defineProps(['playId'])
-  const hostStore = useHostStore(props.playId)()
+  const questionStore = useHostQuestionStore(props.playId)()
 
   onMounted(async () => {
-    await hostStore.fetchQuestion()
+    await questionStore.fetchQuestion()
   })
 
   const isLoading = computed(() => {
-    return [Status.BeforeLoad, Status.Loading].indexOf(hostStore.questionStatus) != -1
+    return [Status.BeforeLoad, Status.Loading].indexOf(questionStore.questionStatus) != -1
   })
 </script>
 
 <template>
-  <VaCard v-if="!isLoading && hostStore.question">
+  <VaCard v-if="!isLoading && questionStore.question">
     <VaCardTitle>Pytanie</VaCardTitle>
     <VaCardActions align="stretch">
       <VaButton color="success">Dobra Odpowiedź</VaButton>
@@ -24,14 +24,14 @@
     </VaCardActions>
     <VaCardContent>
       <div class="">
-        <span class="bold">Pytanie:</span>{{ hostStore.question.question }}
+        <span class="bold">Pytanie:</span>{{ questionStore.question.question }}
       </div>
       <div class="">
-        <span class="bold">Odpowiedź:</span>{{ hostStore.question.answer }}
+        <span class="bold">Odpowiedź:</span>{{ questionStore.question.answer }}
       </div>
       <div class="text-block">
         <p class="bold">Podpowiedzi:</p>
-        <textarea readonly>{{ hostStore.question.hints }}</textarea>
+        <textarea readonly>{{ questionStore.question.hints }}</textarea>
       </div>
     </VaCardContent>
   </VaCard>
@@ -57,7 +57,7 @@
       </VaCardContent>
     </VaCard>
   </VaInnerLoading>
-  <VaCard v-if="!isLoading && hostStore.question == null">
+  <VaCard v-if="!isLoading && questionStore.question == null">
     <VaCardTitle>Pytanie</VaCardTitle>
     <VaAlert color="warning" class="mb-6">
       Nie wylosowano pytania!

@@ -21,7 +21,7 @@ def sql() -> Settings:
         "options": {
             "pool_recycle": config("DB_POOL_RECYCLE", 3600, cast=int),
             "pool_pre_ping": config("DB_PRE_PING", True, cast=bool),
-            "pool_size": config("DB_SIZE", 40, cast=int),
+            "pool_size": config("DB_SIZE", 100, cast=int),
             "max_overflow": config("DB_OVERFLOW", 20, cast=int),
         },
     }

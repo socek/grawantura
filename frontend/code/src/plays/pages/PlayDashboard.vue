@@ -5,6 +5,7 @@
   import createTeamForm from "@/teams/widgets/createTeam.vue"
   import playAdmin from "@/plays/components/PlayAdmin.vue"
   import HostQuestion from "@/plays/components/HostQuestion.vue"
+  import HostTimer from "@/plays/components/HostTimer.vue"
 
   const route = useRoute()
   const playId = computed(() => route.params.playId)
@@ -26,6 +27,7 @@
       </div>
     </VaCard>
     <playAdmin :playId="playId" />
+    <HostTimer :playId="playId" />
     <HostQuestion :playId="playId" />
   </div>
 </template>

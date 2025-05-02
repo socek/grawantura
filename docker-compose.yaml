@@ -38,7 +38,7 @@ services:
     env_file: .env
 
   traefik:
-    image: "traefik:v3.3.3"
+    image: "traefik:v3.3.6"
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"

@@ -5,7 +5,7 @@ import { hostUrl } from '@/base/urls'
 
 import jwtCall from "@/auth/calls"
 
-export default (playId) => defineStore("host_" + playId, () => {
+export const useHostQuestionStore = (playId) => defineStore("question_" + playId, () => {
   const question = ref({})
   const questionStatus = ref(Status.BeforeLoad)
 
@@ -37,6 +37,45 @@ export default (playId) => defineStore("host_" + playId, () => {
     question,
     questionStatus,
     fetchQuestion,
+  }
+})
+
+export const useHostViewStore = (playId) => defineStore("view_" + playId, () => {
+  const payload = ref({})
+  const fetchStatus = ref(Status.BeforeLoad)
+
+  async function clear() {
+    fetchStatus.value = Status.BeforeLoad
+  }
+
+  async function fetch(force) {
+    force = force || false
+    if (!force && fetchStatus.value == Status.Completed) {
+      return
+    }
+    fetchStatus.value = Status.Loading
+    try {
+      const { data, error, reqstatus } = await jwtCall({
+        url: hostUrl(playId, 'view'),
+        method: "get",
+      })
+      if (error && reqstatus !== 406) throw error
+      if (data) {
+        payload.value = data
+        fetchStatus.value = Status.Completed
+      } else {
+        fetchStatus.value = Status.Failed
+      }
+    } catch (error) {
+      fetchStatus.value = Status.Failed
+    }
+  }
+
+  return {
+    payload,
+    fetchStatus,
+    fetch,
+    clear,
   }
 })
 

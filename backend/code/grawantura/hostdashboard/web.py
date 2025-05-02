@@ -10,6 +10,7 @@ from grawantura.main.web import WebEndpoint
 from grawantura.plays.drivers import commands
 from grawantura.plays.drivers import queries
 from grawantura.plays.drivers.queries import list_unused_questions
+from grawantura.plays.drivers.tables import View
 from grawantura.plays.webhelpers import validate_play_id
 
 
@@ -21,6 +22,17 @@ async def question(request: Request) -> dict:
     return {
         "question": queries.current_question(play_id),
     }
+
+
+@WebEndpoint
+async def view(request: Request) -> dict:
+    user_id = validate_user_id(request)
+    play_id = validate_play_id(request, user_id)
+
+    return {
+        "name": queries.current_view(play_id).value,
+    }
+
 
 @WebEndpoint
 async def draw_question(request: Request) -> dict:
@@ -48,6 +60,30 @@ async def draw_question(request: Request) -> dict:
     }
 
 
+@WebEndpoint
+async def change_view(request: Request) -> dict:
+    user_id = validate_user_id(request)
+    play_id = validate_play_id(request, user_id)
+
+    payload = await request.json()
+
+    commands.change_view(play_id, View(payload["name"]))
+    add_event(
+        {
+            "type": "host_action",
+            "name": "change_view",
+            "view_name": payload["name"],
+            "play_id": play_id,
+        }
+    )
+    return {
+        "status": "ok",
+    }
+
+
 def get_routes(prefix: str) -> Generator[Route]:
     yield Route(f"{prefix}/question", question, methods=["GET"])
+    yield Route(f"{prefix}/view", view, methods=["GET"])
+
     yield Route(f"{prefix}/draw_question", draw_question, methods=["POST"])
+    yield Route(f"{prefix}/change_view", change_view, methods=["POST"])

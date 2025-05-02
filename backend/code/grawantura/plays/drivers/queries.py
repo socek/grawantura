@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 
 from grawantura.games.drivers.tables import GameTable
 from grawantura.main.globals import Query
-from grawantura.plays.drivers.tables import EventTypenames
 from grawantura.plays.drivers.tables import PlayEventTable
 from grawantura.plays.drivers.tables import PlayTable
+from grawantura.plays.drivers.tables import View
 from grawantura.questions.drivers.tables import QuestionTable
 
 
@@ -103,7 +103,6 @@ def current_question(
     db: Optional[Session] = None,
 ) -> Optional[dict]:
     assert db
-
     stmt = (
         select(QuestionTable)
         .join(GameTable, GameTable.id == QuestionTable.game_id)
@@ -122,3 +121,21 @@ def current_question(
     obj = db.execute(stmt).first()
     if obj:
         return obj[0]._asdict()
+
+@Query
+def current_view(
+    play_id: UUID,
+    db: Optional[Session] = None,
+) -> View:
+    assert db
+    stmt = (
+        select(PlayEventTable.view_name)
+        .filter(PlayEventTable.play_id == play_id)
+        .order_by(PlayEventTable.created_at.desc())
+        .limit(1)
+    )
+    obj = db.execute(stmt).first()
+    if obj:
+        return View(obj[0])
+
+    return View.scoreboard

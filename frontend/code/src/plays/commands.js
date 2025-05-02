@@ -78,9 +78,26 @@ export const drawQuestion = async (playId) => {
   )
 }
 
+export const changeView = async (playId, name) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "change_view"),
+      "method": "POST",
+      "data": {
+        "name": name,
+      }
+    },
+    {
+       "success": "View changed!",
+      "failed": "Draw failed.",
+    },
+  )
+}
+
 export default {
   createPlay,
   updatePlay,
   deletePlay,
   drawQuestion,
+  changeView,
 }

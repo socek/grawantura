@@ -12,6 +12,7 @@ from grawantura.main.globals import Command
 from grawantura.plays.drivers.tables import EventTypenames
 from grawantura.plays.drivers.tables import PlayEventTable
 from grawantura.plays.drivers.tables import PlayTable
+from grawantura.plays.drivers.tables import View
 
 
 @Command
@@ -93,6 +94,26 @@ def draw_question(
     }
     stmt = insert(PlayEventTable).values([row])
     db.execute(stmt)
-    # get questions that are avalible (remove alredy used)
-    # draw
-    # return question_id
+
+
+@Command
+def change_view(
+    play_id: UUID,
+    view: View,
+    event_id: Optional[UUID] = None,
+    now: Optional[datetime] = None,
+    db: Optional[Session] = None,
+):
+    assert db
+    event_id = event_id or uuid4()
+    now = now or datetime.now()
+    row = {
+        "id": event_id,
+        "created_at": now,
+        "updated_at": now,
+        "play_id": play_id,
+        "view_name": view.value,
+        "typename": EventTypenames.change_view.value,
+    }
+    stmt = insert(PlayEventTable).values([row])
+    db.execute(stmt)

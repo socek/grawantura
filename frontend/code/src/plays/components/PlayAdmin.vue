@@ -1,11 +1,36 @@
 <script setup>
+  import { onMounted, computed } from 'vue'
   import commands from "@/plays/commands"
+  import { useHostViewStore } from "@/plays/hoststore"
+  import { Status } from '@/base/basestore'
 
   const props = defineProps(['playId'])
+  const hostViewStore = useHostViewStore(props.playId)()
 
   const drawQuestion = async () => {
     await commands.drawQuestion(props.playId)
   }
+
+  const showScoreboardView = async () => {
+    await hostViewStore.clear()
+    await commands.changeView(props.playId, "scoreboard")
+  }
+
+  const showQuestionView = async () => {
+    await hostViewStore.clear()
+    await commands.changeView(props.playId, "question")
+  }
+
+  const viewName = computed(() => hostViewStore.payload.name)
+  const viewStatus = (name) => name == viewName.value
+  const isLoading = computed(() => {
+    return [Status.BeforeLoad, Status.Loading].indexOf(hostViewStore.fetchStatus) != -1
+  })
+
+  onMounted(async () => {
+    await hostViewStore.fetch()
+  })
+
 </script>
 
 <template>
@@ -13,26 +38,8 @@
     <VaCardTitle>Licytacja</VaCardTitle>
     <VaCardActions align="stretch" vertical>
       <VaButton color="success" @click="drawQuestion">Losuj Pytanie</VaButton>
-      <VaButton>Scorboard</VaButton>
-      <VaButton>Pytanie</VaButton>
+      <VaButton :loading="isLoading" :disabled="viewStatus('scoreboard')" @click="showScoreboardView">Scorboard</VaButton>
+      <VaButton :loading="isLoading" :disabled="viewStatus('question')" @click="showQuestionView">Pytanie</VaButton>
     </VaCardActions>
-    <!-- <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2">
-        Odpowiedź
-      </div>
-      <div class="flex flex-col md:flex-row gap-2 mb-2">
-        <VaButton color="success">Dobra Odpowiedź</VaButton>
-        <VaButton color="danger">Zła Odpowiedź</VaButton>
-        <VaButton color="warning">Pokaż podpowiedź</VaButton>
-      </div>
-      <div class="flex flex-col md:flex-row gap-2 mb-2">
-        Timer
-      </div>
-      <div class="flex flex-col md:flex-row gap-2 mb-2">
-        <VaButton color="success">Start</VaButton>
-        <VaButton color="danger">Stop</VaButton>
-        <VaButton color="warning">Reset</VaButton>
-      </div>
-    </VaCardContent> -->
   </VaCard>
 </template>
