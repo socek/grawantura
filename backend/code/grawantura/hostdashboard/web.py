@@ -6,11 +6,9 @@ from starlette.routing import Route
 
 from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.commands import add_event
+from grawantura.hostdashboard.drivers import commands
+from grawantura.hostdashboard.drivers import queries
 from grawantura.main.web import WebEndpoint
-from grawantura.plays.drivers import commands
-from grawantura.plays.drivers import queries
-from grawantura.plays.drivers.queries import list_unused_questions
-from grawantura.plays.drivers.tables import View
 from grawantura.plays.webhelpers import validate_play_id
 
 
@@ -38,7 +36,7 @@ async def view(request: Request) -> dict:
 async def draw_question(request: Request) -> dict:
     user_id = validate_user_id(request)
     play_id = validate_play_id(request, user_id)
-    avalible_questions = list_unused_questions(play_id)
+    avalible_questions = queries.list_unused_questions(play_id)
     if len(avalible_questions) < 1:
         return {
             "status": "fail",
@@ -67,7 +65,7 @@ async def change_view(request: Request) -> dict:
 
     payload = await request.json()
 
-    commands.change_view(play_id, View(payload["name"]))
+    commands.change_view(play_id, queries.View(payload["name"]))
     add_event(
         {
             "type": "host_action",

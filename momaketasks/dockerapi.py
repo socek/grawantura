@@ -61,7 +61,7 @@ class DockerServiceShouldRunDependency(Dependency):
 
 
 class DockerUpTask(Task):
-    name = "dockerup"
+    name = "up"
 
     dependecies = [
         MountQQ(),
