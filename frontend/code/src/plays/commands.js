@@ -94,10 +94,27 @@ export const changeView = async (playId, name) => {
   )
 }
 
+export const startGame = async (playId, money) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "start"),
+      "method": "POST",
+      "data": {
+        "money": money
+      }
+    },
+    {
+       "success": "Game started!",
+      "failed": "Game start failed.",
+    },
+  )
+}
+
 export default {
   createPlay,
   updatePlay,
   deletePlay,
   drawQuestion,
   changeView,
+  startGame,
 }

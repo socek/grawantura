@@ -6,7 +6,7 @@
   const questionStore = useHostQuestionStore(props.playId)()
 
   onMounted(async () => {
-    await questionStore.fetchQuestion()
+    await questionStore.fetch()
   })
 
   const isLoading = computed(() => {

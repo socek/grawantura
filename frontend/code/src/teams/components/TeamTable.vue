@@ -2,14 +2,15 @@
 import { computed, onMounted, ref } from 'vue'
 
 import { Status } from '@/base/basestore'
-import useTeamStore from '@/teams/store.js'
+import useTeamStore from '@/teams/store'
+import { useHostQuestionStore } from "@/plays/hoststore"
 
 import editTeamForm from '@/teams/widgets/editTeam.vue'
 import deleteTeamForm from '@/teams/widgets/deleteTeam.vue'
 
 const props = defineProps(['playId'])
+const questionStore = useHostQuestionStore(props.playId)()
 const teamStore = useTeamStore(props.playId)()
-
 
 const isLoading = computed(() => [Status.BeforeLoad, Status.Loading].indexOf(teamStore.status) != -1)
 
@@ -23,32 +24,53 @@ const columns = [
 
 const teams = computed(() => teamStore.items)
 
+const moneyData = ref({})
+const auctionData = ref({})
+const addonData = ref({})
+
+const refreshMoneyPool = () => {
+  moneyData.value = {}
+  auctionData.value = {}
+  addonData.value = {}
+  for (const [key, value] of Object.entries(questionStore.moneyPool)) {
+    if(key == "money_pool") {
+      adminScoresMoney.value = value
+    } else {
+      moneyData.value[key] = value
+      auctionData.value[key] = 0
+      addonData.value[key] = 0
+    }
+  }
+}
+
 onMounted(async () => {
   await teamStore.fetch()
+  await questionStore.fetch()
+  refreshMoneyPool()
 })
 
-const adminScoresMoney = ref(0);
-const adminScoresAddon = ref(0);
+const adminScoresMoney = ref(0)
+const adminScoresAddon = ref(0)
 const adminScoresAuctioned = computed(() => {
   let sum = 0
   sum += parseInt(adminScoresMoney.value) || 0
   sum += parseInt(adminScoresAddon.value) || 0
-  teamStore.items.forEach((team, index) => {
-    sum += parseInt(team.auctioned) || 0
-  })
+  for (const [key, rawValue] of Object.entries(auctionData.value)) {
+    sum += parseInt(rawValue) || 0
+  }
   return sum
 });
 
 const isGreatest = (id) => {
   let greatestId = null
   let greatestValue = 0
-  teamStore.items.forEach((team, index) => {
-    const value = parseInt(team.auctioned) || 0
+  for (const [key, rawValue] of Object.entries(auctionData.value)) {
+    const value = parseInt(rawValue) || 0
     if(value > greatestValue) {
       greatestValue = value
-      greatestId = team.id
+      greatestId = key
     }
-  })
+  }
   return greatestId == id
 }
 
@@ -78,7 +100,7 @@ const isGreatest = (id) => {
         <div class="flex gap-2 justify-end">
           <VaInput
             readonly
-            v-model="rowData.money"
+            v-model="moneyData[rowData.id]"
           />
         </div>
       </template>
@@ -87,7 +109,7 @@ const isGreatest = (id) => {
         <div class="flex gap-2 justify-end">
           <VaInput
             :success="isGreatest(rowData.id)"
-            v-model="rowData.auctioned"
+            v-model="auctionData[rowData.id]"
           />
         </div>
       </template>
@@ -95,7 +117,7 @@ const isGreatest = (id) => {
       <template #cell(addon)="{ rowData }">
         <div class="flex gap-2 justify-end">
           <VaInput
-            v-model="rowData.addon"
+            v-model="addonData[rowData.id]"
           />
         </div>
       </template>

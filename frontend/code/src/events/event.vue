@@ -40,7 +40,7 @@
     },
     host_action: async (socket, data) => {
       const payload = data["payload"]
-      if(payload["name"] == "draw_question") {
+      if(["draw_question", "game start"].includes(payload["name"])) {
         const playId = payload["play_id"]
         await useHostQuestionStore(playId)().fetchQuestion(true)
       } else if(payload["name"] == "change_view") {

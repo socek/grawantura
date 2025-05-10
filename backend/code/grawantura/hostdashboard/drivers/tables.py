@@ -12,6 +12,7 @@ from grawantura.main.tables import SqlTable
 class View(Enum):
     scoreboard = "scoreboard"
     question = "question"
+    timetable = "timetable"
 
 
 class EventTypenames(Enum):

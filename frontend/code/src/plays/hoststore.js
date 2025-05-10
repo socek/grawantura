@@ -7,9 +7,11 @@ import jwtCall from "@/auth/calls"
 
 export const useHostQuestionStore = (playId) => defineStore("question_" + playId, () => {
   const question = ref({})
+  const isStarted = ref(false)
+  const moneyPool = ref({})
   const questionStatus = ref(Status.BeforeLoad)
 
-  async function fetchQuestion(force) {
+  async function fetch(force) {
     force = force || false
     if (!force && questionStatus.value == Status.Completed) {
       return
@@ -24,6 +26,8 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
       if (error && reqstatus !== 406) throw error
       if (data) {
         question.value = data.question
+        moneyPool.value = data.money
+        isStarted.value = data.is_started
         questionStatus.value = Status.Completed
       } else {
         questionStatus.value = Status.Failed
@@ -35,8 +39,10 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
 
   return {
     question,
+    isStarted,
     questionStatus,
-    fetchQuestion,
+    fetch,
+    moneyPool,
   }
 })
 

@@ -1,3 +1,4 @@
+from typing import Generator
 from typing import Optional
 from uuid import UUID
 
@@ -78,13 +79,17 @@ def current_view(
     assert db
     stmt = (
         select(PlayEventTable.payload)
-        .filter(PlayEventTable.play_id == play_id)
+        .filter(
+            PlayEventTable.play_id == play_id,
+            PlayEventTable.typename == EventTypenames.change_view.value,
+        )
         .order_by(PlayEventTable.created_at.desc())
         .limit(1)
     )
     obj = db.execute(stmt).first()
 
     if obj and obj[0]:
+        ic(obj)
         return View(obj[0]["view_name"])
 
     return View.scoreboard
@@ -96,17 +101,21 @@ def current_money(
     db: Optional[Session] = None,
 ) -> dict:
     assert db
-    stmt = select(PlayEventTable.typename, PlayEventTable.payload).filter(
-        PlayEventTable.play_id == play_id,
-        PlayEventTable.typename.in_(
-            [
-                EventTypenames.init_money.value,
-                EventTypenames.end_auction.value,
-                EventTypenames.hint_bought.value,
-                EventTypenames.answer.value,
-            ]
-        ),
-    ).order_by(PlayEventTable.created_at)
+    stmt = (
+        select(PlayEventTable.typename, PlayEventTable.payload)
+        .filter(
+            PlayEventTable.play_id == play_id,
+            PlayEventTable.typename.in_(
+                [
+                    EventTypenames.init_money.value,
+                    EventTypenames.end_auction.value,
+                    EventTypenames.hint_bought.value,
+                    EventTypenames.answer.value,
+                ]
+            ),
+        )
+        .order_by(PlayEventTable.created_at)
+    )
 
     result = {
         "money_pool": 0,
@@ -129,3 +138,22 @@ def current_money(
                 result[last_auction_win] = result.get(last_auction_win, 0) + result["money_pool"]
                 result["money_pool"] = 0
     return result
+
+
+@Query
+def play_events(
+    play_id: UUID,
+    db: Optional[Session] = None,
+) -> Generator[dict]:
+    assert db
+    stmt = select(
+        PlayEventTable.question_id,
+        PlayEventTable.typename,
+        PlayEventTable.payload,
+        PlayEventTable.created_at,
+    ).filter(
+        PlayEventTable.play_id == play_id,
+        PlayEventTable.typename == EventTypenames.init_money.value,
+    )
+    for row in db.execute(stmt):
+        yield row._asdict()

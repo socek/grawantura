@@ -69,7 +69,7 @@ def change_view(
 @Command
 def init_money(
     play_id: UUID,
-    payload: dict,
+    payload: dict[str, int],
     event_id: Optional[UUID] = None,
     now: Optional[datetime] = None,
     db: Optional[Session] = None,

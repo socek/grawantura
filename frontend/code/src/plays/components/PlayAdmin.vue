@@ -21,6 +21,11 @@
     await commands.changeView(props.playId, "question")
   }
 
+  const showTimetableView = async () => {
+    await hostViewStore.clear()
+    await commands.changeView(props.playId, "timetable")
+  }
+
   const viewName = computed(() => hostViewStore.payload.name)
   const viewStatus = (name) => name == viewName.value
   const isLoading = computed(() => {
@@ -40,6 +45,7 @@
       <VaButton color="success" @click="drawQuestion">Losuj Pytanie</VaButton>
       <VaButton :loading="isLoading" :disabled="viewStatus('scoreboard')" @click="showScoreboardView">Scorboard</VaButton>
       <VaButton :loading="isLoading" :disabled="viewStatus('question')" @click="showQuestionView">Pytanie</VaButton>
+      <VaButton :loading="isLoading" :disabled="viewStatus('timetable')" @click="showTimetableView">Timetable</VaButton>
     </VaCardActions>
   </VaCard>
 </template>

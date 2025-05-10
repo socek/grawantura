@@ -25,7 +25,7 @@ export default (playId) => defineStore("teams_" + playId, () => {
       if (data) {
         items.value = data.items
         items.value.forEach((item, index) => {
-          item["money"] = 5000
+          item["money"] = 0
           item["auctioned"] = 0
           item["addon"] = 0
         })

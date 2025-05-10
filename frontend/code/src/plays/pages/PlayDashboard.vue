@@ -6,6 +6,7 @@
   import playAdmin from "@/plays/components/PlayAdmin.vue"
   import HostQuestion from "@/plays/components/HostQuestion.vue"
   import HostTimer from "@/plays/components/HostTimer.vue"
+  import StartGame from "@/plays/widgets/startGame.vue"
 
   const route = useRoute()
   const playId = computed(() => route.params.playId)
@@ -19,7 +20,7 @@
         <VaCardContent>
           <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
             <createTeamForm :playId="playId" :key="playId" />
-            <VaButton color="warning">Start game</VaButton>
+            <StartGame :playId="playId" :key="playId" />
           </div>
           <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
             <TeamTable :playId="playId" />
