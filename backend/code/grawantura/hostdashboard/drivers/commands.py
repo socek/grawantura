@@ -123,10 +123,10 @@ def end_auction(
 
 
 @Command
-def hint_bought(
+def hint(
     play_id: UUID,
-    team_id: UUID,
-    cost: int,
+    change: dict,
+    money: dict,
     event_id: Optional[UUID] = None,
     now: Optional[datetime] = None,
     db: Optional[Session] = None,
@@ -143,10 +143,11 @@ def hint_bought(
         "created_at": now,
         "updated_at": now,
         "play_id": play_id,
-        "typename": EventTypenames.hint_bought.value,
+        "typename": EventTypenames.hint.value,
         "question_id": question_id_stmt,
         "payload": {
-            team_id.hex: cost,
+            "change": change,
+            "money": money,
         },
     }
     stmt = insert(PlayEventTable).values([row])

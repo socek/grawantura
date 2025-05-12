@@ -20,8 +20,7 @@ class EventTypenames(Enum):
     change_view = "change view"
     end_auction = "end auction"
     init_money = "init money"
-    hint_bought = "hint bought"
-    hint_used = "hint used"
+    hint = "hint"
     answer = "answer"
 
 

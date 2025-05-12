@@ -88,7 +88,7 @@ export const changeView = async (playId, name) => {
       }
     },
     {
-       "success": "View changed!",
+      "success": "View changed!",
       "failed": "Draw failed.",
     },
   )
@@ -104,8 +104,76 @@ export const startGame = async (playId, money) => {
       }
     },
     {
-       "success": "Game started!",
+      "success": "Game started!",
       "failed": "Game start failed.",
+    },
+  )
+}
+
+export const endAuction = async (playId, money) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "end_auction"),
+      "method": "POST",
+      "data": {
+        "money": money
+      }
+    },
+    {
+      "success": "Auction finished!",
+      "failed": "Auction end failed.",
+    },
+  )
+}
+
+export const addHint = async (playId, change, money) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "hint"),
+      "method": "POST",
+      "data": {
+        "change": change,
+        "money": money,
+      }
+    },
+    {
+      "success": "Hint added!",
+      "failed": "Hint add failed.",
+    },
+  )
+}
+
+export const useHint = async (playId, teamId) => {
+  const change = {}
+  change[teamId] = -1
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "hint"),
+      "method": "POST",
+      "data": {
+        "change": change,
+        "money": {},
+      }
+    },
+    {
+      "success": "Hint added!",
+      "failed": "Hint add failed.",
+    },
+  )
+}
+
+export const answer = async (playId, success) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "answer"),
+      "method": "POST",
+      "data": {
+        "success": success,
+      }
+    },
+    {
+      "success": "Answer saved!",
+      "failed": "Answer save failed.",
     },
   )
 }
@@ -117,4 +185,8 @@ export default {
   drawQuestion,
   changeView,
   startGame,
+  endAuction,
+  addHint,
+  useHint,
+  answer,
 }

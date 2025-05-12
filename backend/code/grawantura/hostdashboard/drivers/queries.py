@@ -153,7 +153,6 @@ def play_events(
         PlayEventTable.created_at,
     ).filter(
         PlayEventTable.play_id == play_id,
-        PlayEventTable.typename == EventTypenames.init_money.value,
     )
     for row in db.execute(stmt):
         yield row._asdict()

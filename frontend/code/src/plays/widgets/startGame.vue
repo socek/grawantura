@@ -35,7 +35,6 @@
     teams.value.forEach((row, index) => {
       formData.value[row.id] = 5000
     })
-    console.log(formData.value)
     dialogVisible.value = true
   }
 
@@ -49,7 +48,6 @@
         formData.value[key] = parseInt(value)
       }
       await commands.startGame(props.playId, formData.value)
-      console.log(formData.value)
       dialogVisible.value = false
     }
   }

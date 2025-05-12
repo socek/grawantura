@@ -2,6 +2,8 @@
   import { computed, onMounted, ref } from 'vue'
   import { Status } from '@/base/basestore'
   import { useHostQuestionStore } from "@/plays/hoststore"
+  import commands from "@/plays/commands"
+
   const props = defineProps(['playId'])
   const questionStore = useHostQuestionStore(props.playId)()
 
@@ -12,15 +14,52 @@
   const isLoading = computed(() => {
     return [Status.BeforeLoad, Status.Loading].indexOf(questionStore.questionStatus) != -1
   })
+
+  const successAnswer = async () => {
+    await commands.answer(props.playId, true)
+  }
+
+  const failedAnswer = async () => {
+    await commands.answer(props.playId, false)
+  }
+
+  const showHints = async () => {
+    await commands.useHint(props.playId, questionStore.answeringTeamId)
+  }
+
+  const isDisabled = computed(() => {
+    return questionStore.answeringTeamId === null
+  })
+
+  const isHintDisabled = computed(() => {
+    return questionStore.showHint || questionStore.answeringTeamId === null
+  })
+
+
 </script>
 
 <template>
   <VaCard v-if="!isLoading && questionStore.question">
     <VaCardTitle>Pytanie</VaCardTitle>
     <VaCardActions align="stretch">
-      <VaButton color="success">Dobra Odpowiedź</VaButton>
-      <VaButton color="danger">Zła Odpowiedź</VaButton>
-      <VaButton color="warning">Pokaż podpowiedź</VaButton>
+      <VaButton
+        :disabled="isDisabled"
+        color="success"
+        @click="successAnswer">
+          Dobra Odpowiedź
+      </VaButton>
+      <VaButton
+        :disabled="isDisabled"
+        color="danger"
+        @click="failedAnswer">
+          Zła Odpowiedź
+      </VaButton>
+      <VaButton
+        :disabled="isHintDisabled"
+        color="warning"
+        @click="showHints">
+          Pokaż podpowiedź
+      </VaButton>
     </VaCardActions>
     <VaCardContent>
       <div class="">
@@ -63,9 +102,9 @@
       Nie wylosowano pytania!
     </VaAlert>
     <VaCardActions align="stretch">
-      <VaButton disabled="true" color="success">Dobra Odpowiedź</VaButton>
-      <VaButton disabled="true" color="danger">Zła Odpowiedź</VaButton>
-      <VaButton disabled="true" color="warning">Pokaż podpowiedź</VaButton>
+      <VaButton :disabled="true" color="success">Dobra Odpowiedź</VaButton>
+      <VaButton :disabled="true" color="danger">Zła Odpowiedź</VaButton>
+      <VaButton :disabled="true" color="warning">Pokaż podpowiedź</VaButton>
     </VaCardActions>
     <VaCardContent>
       <div class="">

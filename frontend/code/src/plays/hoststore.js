@@ -8,8 +8,14 @@ import jwtCall from "@/auth/calls"
 export const useHostQuestionStore = (playId) => defineStore("question_" + playId, () => {
   const question = ref({})
   const isStarted = ref(false)
-  const moneyPool = ref({})
   const questionStatus = ref(Status.BeforeLoad)
+
+  const moneyPool = ref({})
+  const auctionedPool = ref({})
+  const addonPool = ref({})
+  const hints = ref({})
+  const answeringTeamId = ref(null)
+  const showHint = ref(false)
 
   async function fetch(force) {
     force = force || false
@@ -17,6 +23,12 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
       return
     }
     questionStatus.value = Status.Loading
+    moneyPool.value = {}
+    auctionedPool.value = {}
+    addonPool.value = {}
+    hints.value = {}
+    answeringTeamId.value = null
+    showHint.value = false
     try {
       const { data, error, reqstatus } = await jwtCall({
         url: hostUrl(playId, 'question'),
@@ -26,8 +38,15 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
       if (error && reqstatus !== 406) throw error
       if (data) {
         question.value = data.question
-        moneyPool.value = data.money
         isStarted.value = data.is_started
+        for (const [key, value] of Object.entries(data.money)) {
+          moneyPool.value[key] = value
+          auctionedPool.value[key] = 0
+          addonPool.value[key] = 0
+        }
+        hints.value = data.hints
+        answeringTeamId.value = data.answering_team_id
+        showHint.value = data.show_hint
         questionStatus.value = Status.Completed
       } else {
         questionStatus.value = Status.Failed
@@ -43,6 +62,11 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
     questionStatus,
     fetch,
     moneyPool,
+    auctionedPool,
+    addonPool,
+    hints,
+    answeringTeamId,
+    showHint,
   }
 })
 

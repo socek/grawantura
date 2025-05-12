@@ -11,3 +11,7 @@ def validate_play_id(request: Request, user_id: UUID) -> UUID:
     if not has_access(user_id, play_id):
         raise HTTPException(status_code=401)
     return play_id
+
+
+def get_play_id(request: Request) -> UUID:
+    return UUID(request.path_params["play_id"])

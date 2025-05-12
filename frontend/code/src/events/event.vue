@@ -13,6 +13,14 @@
   const authStore = useAuthStore()
   let socket = null;
 
+  const host_action_reload_actions = [
+    "draw_question",
+    "game start",
+    "end auction",
+    "hint",
+    "answer",
+  ]
+
   const eventHandlers = {
     handshake: async (socket, data) => {
       const response = {
@@ -40,9 +48,9 @@
     },
     host_action: async (socket, data) => {
       const payload = data["payload"]
-      if(["draw_question", "game start"].includes(payload["name"])) {
+      if(host_action_reload_actions.includes(payload["name"])) {
         const playId = payload["play_id"]
-        await useHostQuestionStore(playId)().fetchQuestion(true)
+        await useHostQuestionStore(playId)().fetch(true)
       } else if(payload["name"] == "change_view") {
         const playId = payload["play_id"]
         await useHostViewStore(playId)().fetch(true)
