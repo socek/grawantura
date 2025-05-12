@@ -9,6 +9,17 @@ export default (playId) => defineStore("teams_" + playId, () => {
   const items = ref([])
   const status = ref(Status.BeforeLoad)
 
+  function getItemById(itemId) {
+    if (status.value != Status.Completed) {
+      return ""
+    }
+    for (const item of items.value) {
+      if(item["id"] == itemId) {
+        return item
+      }
+    }
+  }
+
   async function fetch(force) {
     force = force || false
     if (!force && status.value == Status.Completed) {
@@ -24,11 +35,6 @@ export default (playId) => defineStore("teams_" + playId, () => {
       if (error && reqstatus !== 406) throw error
       if (data) {
         items.value = data.items
-        items.value.forEach((item, index) => {
-          item["money"] = 0
-          item["auctioned"] = 0
-          item["addon"] = 0
-        })
         status.value = Status.Completed
       } else {
         status.value = Status.Failed
@@ -42,5 +48,6 @@ export default (playId) => defineStore("teams_" + playId, () => {
     items,
     status,
     fetch,
+    getItemById,
   }
 })
