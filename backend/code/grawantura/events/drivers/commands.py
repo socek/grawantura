@@ -19,12 +19,12 @@ def add_event(
     db: Session = None,
 ):
     now = now or datetime.now()
+    event_id = event_id or uuid4()
     row = {
-        "id": uuid4(),
+        "id": event_id,
         "created_at": now,
         "updated_at": now,
         "payload": sanitize(payload),
     }
-    ic(row)
     stmt = insert(EventTable).values([row])
     db.execute(stmt)

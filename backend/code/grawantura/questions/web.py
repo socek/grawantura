@@ -74,7 +74,6 @@ async def delete_question(request: Request) -> dict:
     game_id = validate_game_id(request, user_id)
 
     payload = await request.json()
-    ic(payload)
     commands.delete_question(
         question_id=payload["question_id"],
     )

@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from "pinia"
-import { Status } from '@/base/basestore'
+import { Status, sleep } from '@/base/basestore'
 import { hostUrl } from '@/base/urls'
 
 import jwtCall from "@/auth/calls"
@@ -8,7 +8,7 @@ import jwtCall from "@/auth/calls"
 export const useHostQuestionStore = (playId) => defineStore("question_" + playId, () => {
   const question = ref({})
   const isStarted = ref(false)
-  const questionStatus = ref(Status.BeforeLoad)
+  const status = ref(Status.BeforeLoad)
 
   const moneyPool = ref({})
   const auctionedPool = ref({})
@@ -21,10 +21,13 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
 
   async function fetch(force) {
     force = force || false
-    if (!force && questionStatus.value == Status.Completed) {
+    if (!force && status.value != Status.BeforeLoad) {
+      while(status.value != Status.Completed) {
+        await sleep(300)
+      }
       return
     }
-    questionStatus.value = Status.Loading
+    status.value = Status.Loading
     moneyPool.value = {}
     auctionedPool.value = {}
     addonPool.value = {}
@@ -53,19 +56,19 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
         showHint.value = data.show_hint
         events.value = data.events
         gameId.value = data.game_id
-        questionStatus.value = Status.Completed
+        status.value = Status.Completed
       } else {
-        questionStatus.value = Status.Failed
+        status.value = Status.Failed
       }
     } catch (error) {
-      questionStatus.value = Status.Failed
+      status.value = Status.Failed
     }
   }
 
   return {
     question,
     isStarted,
-    questionStatus,
+    status,
     fetch,
     moneyPool,
     auctionedPool,
@@ -80,18 +83,21 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
 
 export const useHostViewStore = (playId) => defineStore("view_" + playId, () => {
   const payload = ref({})
-  const fetchStatus = ref(Status.BeforeLoad)
+  const status = ref(Status.BeforeLoad)
 
   async function clear() {
-    fetchStatus.value = Status.BeforeLoad
+    status.value = Status.BeforeLoad
   }
 
   async function fetch(force) {
     force = force || false
-    if (!force && fetchStatus.value == Status.Completed) {
+    if (!force && status.value != Status.BeforeLoad) {
+      while(status.value != Status.Completed) {
+        await sleep(300)
+      }
       return
     }
-    fetchStatus.value = Status.Loading
+    status.value = Status.Loading
     try {
       const { data, error, reqstatus } = await jwtCall({
         url: hostUrl(playId, 'view'),
@@ -100,18 +106,18 @@ export const useHostViewStore = (playId) => defineStore("view_" + playId, () => 
       if (error && reqstatus !== 406) throw error
       if (data) {
         payload.value = data
-        fetchStatus.value = Status.Completed
+        status.value = Status.Completed
       } else {
-        fetchStatus.value = Status.Failed
+        status.value = Status.Failed
       }
     } catch (error) {
-      fetchStatus.value = Status.Failed
+      status.value = Status.Failed
     }
   }
 
   return {
     payload,
-    fetchStatus,
+    status,
     fetch,
     clear,
   }

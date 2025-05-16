@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from "pinia"
-import { Status } from '@/base/basestore'
+import { Status, sleep } from '@/base/basestore'
 import { teamsUrl } from '@/base/urls'
 
 import jwtCall from "@/auth/calls"
@@ -23,7 +23,10 @@ export default (playId) => defineStore("teams_" + playId, () => {
 
   async function fetch(force) {
     force = force || false
-    if (!force && status.value == Status.Completed) {
+    if (!force && status.value != Status.BeforeLoad) {
+      while(status.value != Status.Completed) {
+        await sleep(300)
+      }
       return
     }
     status.value = Status.Loading

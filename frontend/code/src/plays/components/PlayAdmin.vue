@@ -29,7 +29,7 @@
   const viewName = computed(() => hostViewStore.payload.name)
   const viewStatus = (name) => name == viewName.value
   const isLoading = computed(() => {
-    return [Status.BeforeLoad, Status.Loading].indexOf(hostViewStore.fetchStatus) != -1
+    return [Status.BeforeLoad, Status.Loading].indexOf(hostViewStore.status) != -1
   })
 
   onMounted(async () => {

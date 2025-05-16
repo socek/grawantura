@@ -44,7 +44,7 @@ class MoneyCalculator(Calculator):
 
     def hint(self, event):
         for key, value in event["payload"]["money"].items():
-            self.result[key] = self.result.get(key, 0) + value
+            self.result[key] = self.result.get(key, 0) + (value or 0)
 
     def answer(self, event):
         if event["payload"]["success"]:
