@@ -9,6 +9,18 @@ export default (gameId) => defineStore("questions_" + gameId, () => {
   const items = ref([])
   const status = ref(Status.BeforeLoad)
 
+  function getItemById(itemId) {
+    if (status.value != Status.Completed) {
+      return null
+    }
+    for (const item of items.value) {
+      if(item["id"] == itemId) {
+        return item
+      }
+    }
+    return null
+  }
+
   async function fetch(force) {
     force = force || false
     if (!force && status.value == Status.Completed) {
@@ -36,5 +48,6 @@ export default (gameId) => defineStore("questions_" + gameId, () => {
     items,
     status,
     fetch,
+    getItemById,
   }
 })

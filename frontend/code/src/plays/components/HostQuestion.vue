@@ -41,7 +41,7 @@
   const teamName = computed(() => {
     if (questionStore.answeringTeamId) {
       const team = teamStore.getItemById(questionStore.answeringTeamId)
-      return team["name"]
+      return team && team["name"]
     }
     return ""
   })

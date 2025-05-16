@@ -1,6 +1,7 @@
 from random import choice
 from typing import Generator
 
+from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.routing import Route
 
@@ -14,6 +15,7 @@ from grawantura.hostdashboard.event import answering_team_id
 from grawantura.hostdashboard.event import is_started
 from grawantura.hostdashboard.event import show_hint
 from grawantura.main.web import WebEndpoint
+from grawantura.plays.drivers.queries import get_game_id
 from grawantura.plays.webhelpers import get_play_id
 from grawantura.plays.webhelpers import validate_play_id
 
@@ -21,6 +23,10 @@ from grawantura.plays.webhelpers import validate_play_id
 @WebEndpoint
 async def question(request: Request) -> dict:
     play_id = get_play_id(request)
+    game_id = get_game_id(play_id)
+
+    if not game_id:
+        raise HTTPException(status_code=404)
 
     events = list(queries.play_events(play_id))
 
@@ -32,6 +38,7 @@ async def question(request: Request) -> dict:
         "is_started": is_started(events),
         "answering_team_id":  answering_team_id(events),
         "show_hint": show_hint(events),
+        "game_id": game_id,
     }
 
 

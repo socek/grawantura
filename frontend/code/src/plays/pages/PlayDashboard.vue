@@ -7,6 +7,7 @@
   import HostQuestion from "@/plays/components/HostQuestion.vue"
   import HostTimer from "@/plays/components/HostTimer.vue"
   import StartGame from "@/plays/widgets/startGame.vue"
+  import EventsLog from "@/plays/widgets/eventsLog.vue"
 
   const route = useRoute()
   const playId = computed(() => route.params.playId)
@@ -28,6 +29,7 @@
         </VaCardContent>
       </div>
     </VaCard>
+    <EventsLog :playId="playId" />
     <playAdmin :playId="playId" />
     <HostTimer :playId="playId" />
     <HostQuestion :playId="playId" />

@@ -89,7 +89,6 @@ def current_view(
     obj = db.execute(stmt).first()
 
     if obj and obj[0]:
-        ic(obj)
         return View(obj[0]["view_name"])
 
     return View.scoreboard
@@ -146,13 +145,18 @@ def play_events(
     db: Optional[Session] = None,
 ) -> Generator[dict]:
     assert db
-    stmt = select(
-        PlayEventTable.question_id,
-        PlayEventTable.typename,
-        PlayEventTable.payload,
-        PlayEventTable.created_at,
-    ).filter(
-        PlayEventTable.play_id == play_id,
+    stmt = (
+        select(
+            PlayEventTable.id,
+            PlayEventTable.question_id,
+            PlayEventTable.typename,
+            PlayEventTable.payload,
+            PlayEventTable.created_at,
+        )
+        .filter(
+            PlayEventTable.play_id == play_id,
+        )
+        .order_by(PlayEventTable.created_at)
     )
     for row in db.execute(stmt):
         yield row._asdict()

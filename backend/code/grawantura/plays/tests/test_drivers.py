@@ -3,10 +3,12 @@ from datetime import timedelta
 from uuid import uuid4
 
 from grawantura.games.drivers.commands import create_game
+from grawantura.games.drivers.commands import delete_game
 from grawantura.main.testing import DbTest
 from grawantura.plays.drivers.commands import create_play
 from grawantura.plays.drivers.commands import delete_play
 from grawantura.plays.drivers.commands import update_play
+from grawantura.plays.drivers.queries import get_game_id
 from grawantura.plays.drivers.queries import get_play_by_id
 from grawantura.plays.drivers.queries import get_plays
 from grawantura.plays.drivers.queries import has_access
@@ -116,15 +118,15 @@ def test_has_access_when_different_user(testdb):
     left_game_id = uuid4()
     left_user_id = uuid4()
     left_play_id = uuid4()
-    create_game("game", left_game_id, left_user_id)
+    create_game("game", left_game_id, left_user_id, db=testdb)
     create_play("play", play_id=left_play_id, game_id=left_game_id, db=testdb)
 
     right_game_id = uuid4()
     right_user_id = uuid4()
     right_play_id = uuid4()
-    create_game("game", right_game_id, right_user_id)
+    create_game("game", right_game_id, right_user_id, db=testdb)
     create_play("play", play_id=right_play_id, game_id=right_game_id, db=testdb)
-    assert has_access(left_user_id, right_play_id) is False
+    assert has_access(left_user_id, right_play_id, db=testdb) is False
 
 
 @DbTest
@@ -132,7 +134,30 @@ def test_has_access_when_same_user(testdb):
     game_id = uuid4()
     user_id = uuid4()
     play_id = uuid4()
-    create_game("game", game_id, user_id)
+    create_game("game", game_id, user_id, db=testdb)
     create_play("play", play_id=play_id, game_id=game_id, db=testdb)
 
-    assert has_access(user_id, play_id) is True
+    assert has_access(user_id, play_id, db=testdb) is True
+
+
+@DbTest
+def test_get_game_id(testdb):
+    game_id = uuid4()
+    user_id = uuid4()
+    play_id = uuid4()
+    create_game("game", game_id, user_id, db=testdb)
+    create_play("play", play_id=play_id, game_id=game_id, db=testdb)
+
+    assert get_game_id(play_id, db=testdb) == game_id
+
+
+@DbTest
+def test_get_game_id_when_game_deleted(testdb):
+    game_id = uuid4()
+    user_id = uuid4()
+    play_id = uuid4()
+    create_game("game", game_id, user_id, db=testdb)
+    create_play("play", play_id=play_id, game_id=game_id, db=testdb)
+    delete_game(game_id, db=testdb)
+
+    assert get_game_id(play_id, db=testdb) is None

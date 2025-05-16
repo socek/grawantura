@@ -11,13 +11,14 @@ export default (playId) => defineStore("teams_" + playId, () => {
 
   function getItemById(itemId) {
     if (status.value != Status.Completed) {
-      return ""
+      return null
     }
     for (const item of items.value) {
       if(item["id"] == itemId) {
         return item
       }
     }
+    return null
   }
 
   async function fetch(force) {

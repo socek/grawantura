@@ -64,3 +64,22 @@ def has_access(
     )
     obj = db.execute(stmt).first()
     return True if obj else False
+
+
+@Query
+def get_game_id(
+    play_id: UUID,
+    db: Optional[Session] = None,
+) -> Optional[UUID]:
+    assert db
+    stmt = (
+        select(PlayTable.game_id)
+        .join(GameTable, PlayTable.game_id == GameTable.id)
+        .filter(
+            GameTable.is_deleted.isnot(True),
+            PlayTable.id == play_id,
+        )
+    )
+    obj = db.execute(stmt).first()
+    if obj and obj[0]:
+        return obj[0]
