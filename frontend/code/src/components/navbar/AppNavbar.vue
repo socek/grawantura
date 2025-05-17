@@ -14,6 +14,9 @@
         <RouterLink to="/" aria-label="Visit home page">
           <VuesticLogo />
         </RouterLink>
+        <VaNavbarItem class="sm:block">
+          <VaButton href="/games" >Games</VaButton>
+        </VaNavbarItem>
       </div>
     </template>
     <template #right>

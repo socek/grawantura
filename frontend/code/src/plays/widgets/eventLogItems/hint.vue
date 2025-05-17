@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, onMounted, ref } from 'vue'
+  import { onMounted, ref } from 'vue'
 
   import useTeamStore from '@/teams/store'
   import deleteEvent from '@/plays/widgets/eventLogItems/deleteEvent.vue'
@@ -8,8 +8,6 @@
   const teamStore = useTeamStore(props.playId)()
   const money = ref({})
   const change = ref({})
-
-  console.log(props.event)
 
   onMounted(async () => {
     await teamStore.fetch()
@@ -68,10 +66,12 @@
     font-weight: bold;
     color: rgb(255, 255, 255);
     background-color: #228200;
+    font-size: 12px;
   }
   .used {
     font-weight: bold;
     color: rgb(38, 40, 36);
     background: #FFD43A;
+    font-size: 12px;
   }
 </style>
