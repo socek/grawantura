@@ -2,6 +2,7 @@ from enum import Enum
 
 from sqlalchemy import JSON
 from sqlalchemy import UUID
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Index
 from sqlalchemy import String
@@ -32,3 +33,4 @@ class PlayEventTable(SqlTable):
     question_id = Column(UUID, nullable=True)
     typename = Column(String, nullable=True)
     payload = Column(JSON, nullable=True)
+    is_deleted = Column(Boolean, nullable=True)

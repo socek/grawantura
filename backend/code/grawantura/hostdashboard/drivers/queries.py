@@ -155,6 +155,7 @@ def play_events(
         )
         .filter(
             PlayEventTable.play_id == play_id,
+            PlayEventTable.is_deleted.isnot(True),
         )
         .order_by(PlayEventTable.created_at)
     )

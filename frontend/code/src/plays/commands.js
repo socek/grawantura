@@ -178,6 +178,22 @@ export const answer = async (playId, success) => {
   )
 }
 
+export const deleteEvent = async (playId, eventId) => {
+  return await jwtCallWithErrorHandling(
+    {
+      "url": hostUrl(playId, "event"),
+      "method": "DELETE",
+      "data": {
+        "event_id": eventId,
+      },
+    },
+    {
+      "success": "Row deleted!",
+      "failed": "Row delete failed.",
+    }
+  )
+}
+
 export default {
   createPlay,
   updatePlay,
@@ -189,4 +205,5 @@ export default {
   addHint,
   useHint,
   answer,
+  deleteEvent,
 }

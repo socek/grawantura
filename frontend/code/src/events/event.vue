@@ -19,6 +19,7 @@
     "end auction",
     "hint",
     "answer",
+    "delete_event",
   ]
 
   const eventHandlers = {

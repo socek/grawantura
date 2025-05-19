@@ -29,7 +29,7 @@
     <div class="row outline">
       <div class="">
         <div class="item" style="font-weight: bold">
-          Wylosowano Pytanie <deleteEvent :playId="event['id']" />
+          Wylosowano Pytanie <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
         </div>
         <div class="item question">
           {{ questionText }}

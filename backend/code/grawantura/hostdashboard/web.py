@@ -36,7 +36,7 @@ async def question(request: Request) -> dict:
         "money": MoneyCalculator().calculate(events),
         "hints": HintsCalculator().calculate(events),
         "is_started": is_started(events),
-        "answering_team_id":  answering_team_id(events),
+        "answering_team_id": answering_team_id(events),
         "show_hint": show_hint(events),
         "game_id": game_id,
     }
@@ -157,6 +157,7 @@ async def hint(request: Request) -> dict:
         "status": "ok",
     }
 
+
 @WebEndpoint
 async def answer(request: Request) -> dict:
     user_id = validate_user_id(request)
@@ -177,6 +178,26 @@ async def answer(request: Request) -> dict:
     }
 
 
+@WebEndpoint
+async def delete_event(request: Request) -> dict:
+    user_id = validate_user_id(request)
+    play_id = validate_play_id(request, user_id)
+
+    payload = await request.json()
+    commands.delete_event(play_id, payload["event_id"])
+    add_event(
+        {
+            "type": "host_action",
+            "name": "delete_event",
+            "play_id": play_id,
+        }
+    )
+
+    return {
+        "status": "ok",
+    }
+
+
 def get_routes(prefix: str) -> Generator[Route]:
     yield Route(f"{prefix}/question", question, methods=["GET"])
     yield Route(f"{prefix}/view", view, methods=["GET"])
@@ -187,3 +208,5 @@ def get_routes(prefix: str) -> Generator[Route]:
     yield Route(f"{prefix}/end_auction", end_auction, methods=["POST"])
     yield Route(f"{prefix}/hint", hint, methods=["POST"])
     yield Route(f"{prefix}/answer", answer, methods=["POST"])
+
+    yield Route(f"{prefix}/event", delete_event, methods=["DELETE"])

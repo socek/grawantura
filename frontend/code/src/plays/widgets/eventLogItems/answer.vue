@@ -10,10 +10,10 @@
   <VaListItem class="list__item goup">
     <div class="row outline">
         <div class="item success" v-if="success">
-          Dobra Odpowiedź <deleteEvent :playId="event['id']" />
+          Dobra Odpowiedź <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
         </div>
         <div class="item fail" v-if="!success">
-          Zła Odpowiedź <deleteEvent :playId="event['id']" />
+          Zła Odpowiedź <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
         </div>
     </div>
   </VaListItem>

@@ -49,7 +49,7 @@
   <VaListItem class="list__item">
     <div class="row outline">
         <div class="hint">
-          Podpowiedź <deleteEvent :playId="props.event['id']" />
+          Podpowiedź <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
         </div>
         <div v-for="(value, teamId) in money" :key="teamId" class="smallrow" :class="getChangeClasses(teamId)">
           {{ teamName(teamId) }}: {{ value }}

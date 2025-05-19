@@ -1,7 +1,8 @@
 <script setup>
   import { useModal } from 'vuestic-ui'
+  import commands from "@/plays/commands"
 
-  const props = defineProps(['playId'])
+  const props = defineProps(['playId', 'eventId'])
   const { confirm } = useModal()
 
   const onDelete = async () => {
@@ -11,7 +12,7 @@
       size: 'small',
     })
     if (agreed) {
-      console.log("TODO THIS")
+      commands.deleteEvent(props.playId, props.eventId)
     }
   }
 

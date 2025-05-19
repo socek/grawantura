@@ -37,6 +37,7 @@ class MoneyCalculator(Calculator):
 
     def end_auction(self, event):
         self.last_auction_win = max(event["payload"], key=event["payload"].get)
+        event["money_stamp"] = self.result["money_pool"]
         for key, value in event["payload"].items():
             if key != "addon":
                 self.result[key] = self.result.get(key, 0) - value
@@ -51,6 +52,7 @@ class MoneyCalculator(Calculator):
             self.result[self.last_auction_win] = (
                 self.result.get(self.last_auction_win, 0) + self.result["money_pool"]
             )
+            event["money_stamp"] = self.result["money_pool"]
             self.result["money_pool"] = 0
 
 

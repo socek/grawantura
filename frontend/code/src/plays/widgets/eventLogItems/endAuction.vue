@@ -29,11 +29,11 @@
   })
 
   const moneyPool = computed(() => {
-    return 0 // TODO moneyPool
+    return props.event["money_stamp"]
   })
 
   const sumMoney = computed(() => {
-    let result = 0 // TODO moneyPool
+    let result = props.event["money_stamp"]
     for (const [key, value] of Object.entries(props.event["payload"])) {
       result += value
     }
@@ -64,7 +64,7 @@
   <VaListItem class="list__item">
     <div class="row outline">
       <div class="item myitem">
-        Licytacja <deleteEvent :playId="event['id']" />
+        Licytacja <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
       </div>
       <div class="smallrow noteam">
         Pula Przed: {{ moneyPool }}

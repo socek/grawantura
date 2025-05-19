@@ -180,3 +180,17 @@ def answer(
     }
     stmt = insert(PlayEventTable).values([row])
     db.execute(stmt)
+
+
+@Command
+def delete_event(
+    play_id: UUID,
+    event_id: UUID,
+    db: Optional[Session] = None,
+):
+    stmt = (
+        update(PlayEventTable)
+        .where(PlayEventTable.id == event_id, PlayEventTable.play_id == play_id)
+        .values({"is_deleted": True})
+    )
+    db.execute(stmt)

@@ -26,7 +26,7 @@
     <div class="row outline">
       <div class="">
         <div class="item" style="font-weight: bold">
-          Początek Gry <deleteEvent :playId="event['id']" />
+          Początek Gry <deleteEvent :eventId="props.event['id']" :playId="props.playId" />
         </div>
         <div class="smallrow" v-for="(value, teamId) in payload" :key="teamId">
           {{ teamName(teamId) }}: {{ value }}

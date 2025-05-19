@@ -12,7 +12,7 @@ from grawantura.main.globals import Query
 @Query
 def get_user_by_email(
     email: str,
-    db: Session = None,
+    db: Optional[Session] = None,
 ) -> Optional[dict]:
     stmt = select(UserTable).filter(UserTable.email == email, UserTable.is_deleted.isnot(True))
     obj = db.execute(stmt).first()
@@ -24,7 +24,7 @@ def get_user_by_email(
 def validate_user(
     email: str,
     password: str,
-    db: Session = None,
+    db: Optional[Session] = None,
 ) -> Optional[UUID]:
     stmt = select(UserTable.id).filter(
         UserTable.email == email,
@@ -39,7 +39,7 @@ def validate_user(
 @Query
 def validate_user_id(
     user_id: UUID,
-    db: Session = None,
+    db: Optional[Session] = None,
 ) -> bool:
     stmt = select(UserTable.id).filter(
         UserTable.id == user_id,

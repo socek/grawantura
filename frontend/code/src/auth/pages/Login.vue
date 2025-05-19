@@ -57,7 +57,7 @@ const formData = reactive({
 const handleLogin = async () => {
   const is_authorized = await authorize(formData.email, formData.password)
   if(is_authorized) {
-    push({ name: 'dashboard' })
+    push({ name: 'games' })
   } else {
     init({"message": "Could not authorize", color: colors.fail})
   }
