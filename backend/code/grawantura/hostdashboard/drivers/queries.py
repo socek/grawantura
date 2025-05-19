@@ -47,6 +47,7 @@ def list_unused_questions(
             and_(
                 PlayEventTable.play_id == PlayTable.id,
                 PlayEventTable.question_id == QuestionTable.id,
+                PlayEventTable.is_deleted.isnot(True),
             ),
         )
         .filter(

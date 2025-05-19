@@ -32,20 +32,23 @@
   <VaCard class="p-3 eventlogmain">
     <VaCardTitle>Historia</VaCardTitle>
     <VaCardContent class="h-[30vh] w-full overflow-auto scrollbarbottom eventlog">
-      <VaList>
+      <VaList v-if="questionStore.events.length != 0">
         <div
           class="flex flex-col md6 bigrow"
           v-for="event in questionStore.events"
           :class="{ goupelo: isGoup(event) }"
           :key="event['id']">
-            <QuestionDraw :playId="props.playId" :key="event['id']" :event="event" v-if="event['typename'] == 'question draw'" />
-            <EndAuction :playId="props.playId" :key="event['id']" :event="event" v-if="event['typename'] == 'end auction'" />
-            <InitMoney :playId="props.playId" :key="event['id']" :event="event" v-if="event['typename'] == 'init money'" />
-            <Hint :playId="props.playId" :key="event['id']" :event="event" v-if="event['typename'] == 'hint'" />
-            <Answer :playId="props.playId" :key="event['id']" :event="event" v-if="event['typename'] == 'answer'" />
+            <QuestionDraw :playId="props.playId" :event="event" v-if="event['typename'] == 'question draw'" />
+            <EndAuction :playId="props.playId" :event="event" v-if="event['typename'] == 'end auction'" />
+            <InitMoney :playId="props.playId" :event="event" v-if="event['typename'] == 'init money'" />
+            <Hint :playId="props.playId" :event="event" v-if="event['typename'] == 'hint'" />
+            <Answer :playId="props.playId" :event="event" v-if="event['typename'] == 'answer'" />
         </div>
         <hr class="hrend" />
       </VaList>
+      <div class="noevents" v-if="questionStore.events.length == 0">
+        No events!
+      </div>
     </VaCardContent>
   </VaCard>
 </template>
@@ -83,5 +86,8 @@
   }
   .hrend {
     border-color: red;
+  }
+  .noevents {
+    width: 450px;
   }
 </style>
