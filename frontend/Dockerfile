@@ -2,9 +2,8 @@ FROM node:23 AS builder
 
 ENV CODE_DIR /code
 
-RUN mkdir -p $CODE_DIR
-
 WORKDIR $CODE_DIR
+RUN mkdir -p $CODE_DIR && mkdir -p /node_modules && ln -s /node_modules
 ENV PATH /code/node_modules/.bin:$PATH
 
 RUN npm install -g vite

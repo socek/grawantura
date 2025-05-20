@@ -26,7 +26,6 @@ services:
         - "traefik.enable=true"
     volumes:
         - ./frontend/code:/code
-        - node_modules:/code/node_modules
     ports:
         - 5173:5173
     command: yarn dev
@@ -50,4 +49,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 volumes:
   pgdata: {}
-  node_modules: {}
