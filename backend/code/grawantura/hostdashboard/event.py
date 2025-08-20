@@ -78,6 +78,7 @@ def answering_team_id(events) -> Optional[str]:
             team_id = None
     return team_id
 
+
 def show_hint(events) -> bool:
     show_hint = False
     for event in events:
@@ -88,3 +89,13 @@ def show_hint(events) -> bool:
         elif Event(event["typename"]) == Event.question_draw:
             show_hint = False
     return show_hint
+
+
+def answer_status(events) -> int:
+    value = 0
+    for event in events:
+        if Event(event["typename"]) == Event.answer:
+            value = 1 if event["payload"]["success"] else 2
+        elif Event(event["typename"]) == Event.question_draw:
+            value = 0
+    return value

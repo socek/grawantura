@@ -16,6 +16,7 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
   const hints = ref({})
   const answeringTeamId = ref(null)
   const showHint = ref(false)
+  const answerStatus = ref(false)
   const events = ref([])
   const gameId = ref(null)
 
@@ -34,6 +35,7 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
     hints.value = {}
     answeringTeamId.value = null
     showHint.value = false
+    answerStatus.value = false
     events.value = []
     gameId.value = null
     try {
@@ -54,6 +56,7 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
         hints.value = data.hints
         answeringTeamId.value = data.answering_team_id
         showHint.value = data.show_hint
+        answerStatus.value = data.answer_status
         events.value = data.events
         gameId.value = data.game_id
         status.value = Status.Completed
@@ -76,6 +79,7 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
     hints,
     answeringTeamId,
     showHint,
+    answerStatus,
     events,
     gameId,
   }

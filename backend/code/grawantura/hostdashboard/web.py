@@ -11,6 +11,7 @@ from grawantura.hostdashboard.drivers import commands
 from grawantura.hostdashboard.drivers import queries
 from grawantura.hostdashboard.event import HintsCalculator
 from grawantura.hostdashboard.event import MoneyCalculator
+from grawantura.hostdashboard.event import answer_status
 from grawantura.hostdashboard.event import answering_team_id
 from grawantura.hostdashboard.event import is_started
 from grawantura.hostdashboard.event import show_hint
@@ -39,6 +40,7 @@ async def question(request: Request) -> dict:
         "answering_team_id": answering_team_id(events),
         "show_hint": show_hint(events),
         "game_id": game_id,
+        "answer_status": answer_status(events),
     }
 
 
