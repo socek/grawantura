@@ -54,7 +54,7 @@ class WebSockeSession:
                 self.last_time = datetime.now()
                 if events:
                     for event in events:
-                        await  self.send(event)
+                        await self.send(event)
                 await sleep(0.1)
         finally:
             self.running = Status.not_running
@@ -65,7 +65,6 @@ class WebSockeSession:
         self.running = Status.stopping
         while self.running != Status.not_running:
             await sleep(0.1)
-
 
 
 _sessions = {}

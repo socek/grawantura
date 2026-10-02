@@ -27,7 +27,6 @@ class EventTypenames(Enum):
 
 class PlayEventTable(SqlTable):
     __tablename__ = "play_events"
-    __table_args__ = (Index("play_events_play_id", "play_id", "typename"),)
 
     play_id = Column(UUID, nullable=True)
     question_id = Column(UUID, nullable=True)

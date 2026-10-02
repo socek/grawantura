@@ -1,11 +1,12 @@
 from typing import Any
 
-from qq.finder import ObjectFinder
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.schema import MetaData
+
+from qq.finder import ObjectFinder
 
 # Recommended naming convention used by Alembic, as various different database
 # providers will autogenerate vastly different names making migrations more

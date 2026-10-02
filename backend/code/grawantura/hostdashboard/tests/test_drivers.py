@@ -172,6 +172,7 @@ def test_current_money_when_auction_end(testdb):
         team3_id: 300,
     }
 
+
 @DbTest
 def test_current_money_when_hint_bought(testdb):
     play_id = uuid4()
@@ -209,6 +210,7 @@ def test_current_money_when_hint_bought(testdb):
         team3_id: 300,
     }
 
+
 @DbTest
 def test_current_money_when_success_answer(testdb):
     play_id = uuid4()
@@ -244,6 +246,7 @@ def test_current_money_when_success_answer(testdb):
         team2_id: 155,
         team3_id: 300,
     }
+
 
 @DbTest
 def test_current_money_when_fail_answer(testdb):

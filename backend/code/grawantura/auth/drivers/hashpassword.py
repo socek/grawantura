@@ -1,9 +1,8 @@
 from hashlib import blake2b
 
+from grawantura.main.globals import AppFun
 from qq.injectors import SetInicjator
 from qq.plugins.settings import SettingsInicjator
-
-from grawantura.main.globals import AppFun
 
 
 @AppFun

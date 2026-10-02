@@ -1,60 +1,65 @@
 <script setup>
-  import { ref, computed, onBeforeUnmount } from 'vue';
+  import { ref, computed, onBeforeUnmount, onMounted, onUnmounted } from 'vue';
   import { useToast } from 'vuestic-ui'
   import colors from '@/base/colors'
+  import { useServerTime } from '@/timer/useServerTime'
 
   const props = defineProps(['playId'])
-  const { init: notify } = useToast()
 
-  const defaultTime = 60000
+  const { now, serverNow, timer, start, stop } = useServerTime(props.playId)
 
-  let targetTime = new Date().getTime() + defaultTime;
-  const leftTotalSeconds = ref(defaultTime)
-  const timeRemaining = ref(defaultTime);
-  const counterRun = ref(false)
+  const isTimerStarted = computed(() => {
+    return Boolean(timer && timer.value && timer.value.status === 'running')
+  })
+
+  const canStopTimer = computed(() => {
+    if (Boolean(timer && timer.value && timer.value.status === 'running')) {
+      const seconds = (timer.value.end_time - now.value) / 1000
+      if(seconds > 0) {
+        return false
+      }
+    }
+    return true
+  })
 
   const formattedTime = computed(() => {
-    const seconds = Math.floor(timeRemaining.value / 1000)
-    const minutes = Math.floor(seconds / 60)
-    return `${String(minutes % 60).padStart(2, '0')}m ${String(seconds % 60).padStart(2, '0')}s`
+    if (isTimerStarted.value) {
+      const seconds = (timer.value.end_time - now.value) / 1000
+      if(seconds <= 0) {
+        return '(zakończony)'
+      }
+      const visibleSeconds = Math.floor(seconds + 1)
+      const visibleMinutes = Math.floor((seconds + 1) / 60)
+      return `${String(visibleMinutes % 60).padStart(2, '0')}m ${String(visibleSeconds % 60).padStart(2, '0')}s`
+    }
+
+    return '(zatrzymany)'
+
   });
 
-  const updateTimer = () => {
-    timeRemaining.value = targetTime - new Date().getTime()
-    if(timeRemaining.value <= 0) {
-      clearInterval(intervalId)
-      timeRemaining.value = 0
-      leftTotalSeconds.value = 0
-      counterRun.value = false
-
-      notify({
-        message: "Time finished!",
-        color: colors.fail,
-      })
+  const startButtonColor = computed(() => {
+    if(canStopTimer.value) {
+      return 'success'
+    } else {
+      return 'warning'
     }
-  }
-
-  let intervalId
-  const startCountdown = () => {
-    targetTime = new Date().getTime() + leftTotalSeconds.value
-    intervalId = setInterval(updateTimer, 500);
-    counterRun.value = true
-  }
-  const stopCountdown = () => {
-    clearInterval(intervalId);
-    leftTotalSeconds.value = timeRemaining.value
-    counterRun.value = false
-  }
-  const resetCountdown = () => {
-    leftTotalSeconds.value = defaultTime
-    timeRemaining.value = defaultTime
-    clearInterval(intervalId)
-    counterRun.value = false
-  }
-
-  onBeforeUnmount(() => {
-    stopCountdown()
   })
+
+  const startButtonAction = () => {
+    start(60)
+  }
+
+  const cssBar = () => {
+    const cssDict = {}
+    if (isTimerStarted.value) {
+      const currentSeconds = (timer.value.end_time - now.value) / 1000
+      const maxSeconds = 60
+      const percent = currentSeconds / maxSeconds * 100
+      cssDict["background"] = `linear-gradient(90deg, #3b82f6 ${percent}%, transparent ${percent}%)`
+      cssDict["color"] = 'red'
+    }
+    return cssDict
+  }
 
 </script>
 
@@ -62,12 +67,12 @@
   <VaCard class="counterBox">
     <VaCardTitle>Licznik</VaCardTitle>
     <VaCardContent>
-      {{ formattedTime }}
+      <div :style="cssBar()">{{ formattedTime }}</div>
     </VaCardContent>
+
     <VaCardActions align="stretch" vertical>
-      <VaButton :disabled="counterRun || leftTotalSeconds == 0" color="success" @click="startCountdown">Start</VaButton>
-      <VaButton :disabled="! counterRun" color="danger" @click="stopCountdown">Stop</VaButton>
-      <VaButton color="warning" @click="resetCountdown">Reset</VaButton>
+      <VaButton @click="startButtonAction()" :color="startButtonColor">Start 60 s</VaButton>
+      <VaButton :disabled="canStopTimer" @click="stop()">Stop</VaButton>
     </VaCardActions>
   </VaCard>
 </template>

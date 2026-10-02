@@ -1,4 +1,5 @@
 from decouple import config
+
 from qq.plugins.settings import TESTS_KEY
 from qq.plugins.types import Settings
 

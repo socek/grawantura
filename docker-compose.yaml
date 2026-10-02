@@ -1,9 +1,11 @@
 services:
   webapi:
     build: backend
-    image: grawantura-backend-image
     volumes:
       - ./backend/code:/code
+      - type: bind
+        source: /home/socek/projects/sapp/qq
+        target: /code/qq
     env_file: .env
     labels:
       - "traefik.http.routers.webapi.rule=PathPrefix(`/api/`)"
@@ -18,7 +20,6 @@ services:
     build:
         context: ./frontend/
         target: builder
-    image: grawantura-frontend-image
     env_file: .env
     labels:
         - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
@@ -37,7 +38,7 @@ services:
     env_file: .env
 
   traefik:
-    image: "traefik:v3.3.6"
+    image: "traefik:v3"
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"

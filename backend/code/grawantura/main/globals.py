@@ -1,10 +1,9 @@
+from grawantura.main.app import SQLALCHEMY_PLUGIN_KEY
+from grawantura.main.app import GrawanturaApplication
 from qq.injectors import SetApplication
 from qq.injectors import SetInicjator
 from qq.plugins.sqlalchemy.injectors import SesssionInicjator
 from qq.plugins.sqlalchemy.injectors import TransactionInicjator
-
-from grawantura.main.app import SQLALCHEMY_PLUGIN_KEY
-from grawantura.main.app import GrawanturaApplication
 
 app = GrawanturaApplication()
 

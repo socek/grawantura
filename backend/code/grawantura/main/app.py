@@ -1,5 +1,6 @@
 from icecream import ic
 from icecream import install
+
 from qq import Application
 from qq.context import Context
 from qq.plugin import Plugin
