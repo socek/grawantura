@@ -1,5 +1,6 @@
 from time import time
 
+
 class TimerStatus:
     running = "running"
     stopped = "stopped"

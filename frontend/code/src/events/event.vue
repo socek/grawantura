@@ -5,6 +5,7 @@
   import useQuestionStore from '@/questions/store'
   import usePlayStore from '@/plays/store'
   import useTeamStore from '@/teams/store'
+  import useTimerStore from '@/timer/store'
   import { useHostQuestionStore, useHostViewStore } from "@/plays/hoststore"
 
   const gamesStore = useGamesStore()
@@ -43,6 +44,9 @@
       } else if(payload["group"] == "teams") {
         const playId = payload["play_id"]
         await useTeamStore(playId)().fetch(true)
+      } else if(payload["group"] == "timer") {
+        const playId = payload["play_id"]
+        await useTimerStore(playId)().refresh()
       } else {
         console.log("Unknow refresh", data);
       }

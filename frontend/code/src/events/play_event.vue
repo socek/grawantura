@@ -43,6 +43,9 @@
       } else if(payload["group"] == "teams") {
         const playId = payload["play_id"]
         await useTeamStore(playId)().fetch(true)
+      } if(payload["group"] == "timer") {
+        const playId = payload["play_id"]
+        // await useTeamStore(playId)().fetch(true)
       } else {
         console.log("Unknow refresh", data);
       }

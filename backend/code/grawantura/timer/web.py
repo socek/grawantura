@@ -1,5 +1,6 @@
 from grawantura.timer.models import get_now_ms
 from typing import Generator
+from grawantura.events.drivers.commands import add_event
 
 from starlette.requests import Request
 from starlette.routing import Route
@@ -23,7 +24,7 @@ async def server_time(request: Request) -> dict:
         "timer": {
             "status": timer["status"],
             "end_time": timer["end_time"],
-        }
+        },
     }
 
 
@@ -35,6 +36,13 @@ async def start(request: Request) -> dict:
     payload = await request.json()
 
     commands.start_timer(play_id, payload["microseconds"])
+    add_event(
+        {
+            "type": "refresh",
+            "group": "timer",
+            "play_id": play_id,
+        }
+    )
     return {
         "status": "ok",
     }

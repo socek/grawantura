@@ -2,19 +2,19 @@
   import { ref, computed, onBeforeUnmount, onMounted, onUnmounted } from 'vue';
   import { useToast } from 'vuestic-ui'
   import colors from '@/base/colors'
-  import { useServerTime } from '@/timer/useServerTime'
+  import useTimerStore from '@/timer/store'
 
   const props = defineProps(['playId'])
 
-  const { now, serverNow, timer, start, stop } = useServerTime(props.playId)
+  const timerStore = useTimerStore(props.playId)()
 
   const isTimerStarted = computed(() => {
-    return Boolean(timer && timer.value && timer.value.status === 'running')
+    return Boolean(timerStore.timer && timerStore.timer.status === 'running')
   })
 
   const canStopTimer = computed(() => {
-    if (Boolean(timer && timer.value && timer.value.status === 'running')) {
-      const seconds = (timer.value.end_time - now.value) / 1000
+    if (Boolean(timerStore.timer && timerStore.timer.status === 'running')) {
+      const seconds = (timerStore.timer.end_time - timerStore.now) / 1000
       if(seconds > 0) {
         return false
       }
@@ -24,7 +24,7 @@
 
   const formattedTime = computed(() => {
     if (isTimerStarted.value) {
-      const seconds = (timer.value.end_time - now.value) / 1000
+      const seconds = (timerStore.timer.end_time - timerStore.now) / 1000
       if(seconds <= 0) {
         return '(zakończony)'
       }
@@ -45,14 +45,18 @@
     }
   })
 
-  const startButtonAction = () => {
-    start(60)
+  const startButtonAction = async () => {
+    await timerStore.start(60)
+  }
+
+  const stopButtonAction = async () => {
+    await timerStore.stop()
   }
 
   const cssBar = () => {
     const cssDict = {}
     if (isTimerStarted.value) {
-      const currentSeconds = (timer.value.end_time - now.value) / 1000
+      const currentSeconds = (timerStore.timer.end_time - timerStore.now) / 1000
       const maxSeconds = 60
       const percent = currentSeconds / maxSeconds * 100
       cssDict["background"] = `linear-gradient(90deg, #3b82f6 ${percent}%, transparent ${percent}%)`
@@ -60,6 +64,10 @@
     }
     return cssDict
   }
+
+  onMounted(async () => {
+    await timerStore.refresh()
+  })
 
 </script>
 
@@ -72,7 +80,7 @@
 
     <VaCardActions align="stretch" vertical>
       <VaButton @click="startButtonAction()" :color="startButtonColor">Start 60 s</VaButton>
-      <VaButton :disabled="canStopTimer" @click="stop()">Stop</VaButton>
+      <VaButton :disabled="canStopTimer" @click="stopButtonAction()">Stop</VaButton>
     </VaCardActions>
   </VaCard>
 </template>

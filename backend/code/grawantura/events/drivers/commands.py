@@ -16,8 +16,9 @@ def add_event(
     payload: dict,
     event_id: Optional[UUID] = None,
     now: Optional[datetime] = None,
-    db: Session = None,
+    db: Optional[Session] = None,
 ):
+    assert db
     now = now or datetime.now()
     event_id = event_id or uuid4()
     row = {

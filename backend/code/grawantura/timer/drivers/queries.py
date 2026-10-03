@@ -9,7 +9,6 @@ from sqlalchemy.orm import Session
 from grawantura.main.globals import Query
 
 
-
 @Query
 def get_time_for_play(
     play_id: UUID,
