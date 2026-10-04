@@ -4,6 +4,7 @@
   import { useHostQuestionStore } from "@/plays/hoststore"
   import useTeamStore from '@/teams/store'
   import commands from "@/plays/commands"
+  import Timer from "@/timer/components/timer.vue"
 
   const props = defineProps(['playId'])
   const teamStore = useTeamStore(props.playId)()
@@ -34,6 +35,7 @@
 <template>
   <VaCard v-if="!isLoading && questionStore.question">
     <VaCardContent>
+      <Timer :playId="props.playId" />
       <div class="">
         <span class="bold">Odpowiada:</span> {{ teamName }}
       </div>

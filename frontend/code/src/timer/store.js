@@ -35,9 +35,6 @@ export default (playId) => defineStore("timer_" + playId, () => {
     basePerf.value = best.t1
     timer.value = best.timer
 
-    tickTimer = setInterval(() => {
-      now.value = serverNow()
-    }, 100)
   }
 
   const start = async (seconds) => {
@@ -60,7 +57,15 @@ export default (playId) => defineStore("timer_" + playId, () => {
     await refresh()
   }
 
-  const runOnUnmounted = () => {
+  const runOnMounted = async () => {
+    await refresh()
+
+    tickTimer = setInterval(() => {
+      now.value = serverNow()
+    }, 100)
+  }
+
+  const runOnBeforeUnmount = async () => {
     if(tickTimer) {
       clearInterval(tickTimer)
       tickTimer = null
@@ -68,6 +73,6 @@ export default (playId) => defineStore("timer_" + playId, () => {
   }
 
 
-  return {timer, refresh, now, start, stop, runOnUnmounted}
+  return {timer, refresh, now, start, stop, runOnMounted, runOnBeforeUnmount}
 
 })

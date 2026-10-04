@@ -6,6 +6,9 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
+  },
   build: {
     sourcemap: true,
   },
