@@ -3,11 +3,13 @@
   import { Status } from '@/base/basestore'
   import { useHostQuestionStore } from "@/plays/hoststore"
   import useTeamStore from '@/teams/store'
+  import useTimerStore from '@/timer/store'
   import commands from "@/plays/commands"
 
   const props = defineProps(['playId'])
   const teamStore = useTeamStore(props.playId)()
   const questionStore = useHostQuestionStore(props.playId)()
+  const timerStore = useTimerStore(props.playId)()
 
   onMounted(async () => {
     await questionStore.fetch()
@@ -18,15 +20,19 @@
     return [Status.BeforeLoad, Status.Loading].indexOf(questionStore.questionStatus) != -1
   })
 
+  // Answering or showing the hints ends the countdown.
   const successAnswer = async () => {
+    await timerStore.stop()
     await commands.answer(props.playId, true)
   }
 
   const failedAnswer = async () => {
+    await timerStore.stop()
     await commands.answer(props.playId, false)
   }
 
   const showHints = async () => {
+    await timerStore.stop()
     await commands.useHint(props.playId, questionStore.answeringTeamId)
   }
 
