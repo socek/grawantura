@@ -8,7 +8,6 @@ from starlette.endpoints import WebSocketEndpoint
 from starlette.routing import WebSocketRoute
 from starlette.websockets import WebSocket
 
-from grawantura.auth.jwtsupport import validate_user_id_from_token
 from grawantura.events.drivers.queries import get_events
 from grawantura.main.web import sanitize
 
@@ -21,7 +20,6 @@ class Status(Enum):
 
 class WebSockeSession:
     def __init__(self, websocket):
-        self.is_validated = False
         self.user_id = None
         self.websocket = websocket
         self.last_time = datetime.now()
@@ -38,8 +36,6 @@ class WebSockeSession:
                 ic(payload)
 
     async def handle_handshake(self, payload):
-        self.user_id = validate_user_id_from_token(payload["token"])
-        self.is_validated = True
         loop = get_running_loop()
         loop.create_task(self.send_events())
 

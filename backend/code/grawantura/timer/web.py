@@ -7,15 +7,14 @@ from starlette.routing import Route
 
 from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.main.web import WebEndpoint
-from grawantura.plays.webhelpers import validate_play_id
+from grawantura.plays.webhelpers import validate_play_id, get_play_id
 from grawantura.timer.drivers import commands
 from grawantura.timer.drivers import queries
 
 
 @WebEndpoint
 async def server_time(request: Request) -> dict:
-    user_id = validate_user_id(request)
-    play_id = validate_play_id(request, user_id)
+    play_id = get_play_id(request)
 
     timer = queries.get_time_for_play(play_id)
 

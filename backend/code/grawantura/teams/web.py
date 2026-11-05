@@ -6,15 +6,14 @@ from starlette.routing import Route
 from grawantura.auth.jwtsupport import validate_user_id
 from grawantura.events.drivers.commands import add_event
 from grawantura.main.web import WebEndpoint
-from grawantura.plays.webhelpers import validate_play_id
+from grawantura.plays.webhelpers import validate_play_id, get_play_id
 from grawantura.teams.drivers import commands
 from grawantura.teams.drivers import queries
 
 
 @WebEndpoint
 async def team_list(request: Request) -> dict:
-    user_id = validate_user_id(request)
-    play_id = validate_play_id(request, user_id)
+    play_id = get_play_id(request)
     return {
         "items": queries.get_teams(play_id),
     }
