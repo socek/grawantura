@@ -24,12 +24,27 @@
       :playId="route.params.playId"
     />
     <TimetableModal
-      v-if="viewStore.payload.name == 'timetable'"
+      v-else-if="viewStore.payload.name == 'timetable'"
       :playId="route.params.playId"
     />
     <ScoreboardModal
-      v-if="viewStore.payload.name == 'scoreboard'"
+      v-else-if="viewStore.payload.name == 'scoreboard'"
       :playId="route.params.playId"
     />
+    <div v-else class="h-full w-full flex items-center justify-center">
+      <h1 class="logo">Grawantura</h1>
+    </div>
   </div>
 </template>
+
+<style scoped>
+  .logo {
+    font-size: clamp(3rem, 10vw, 9rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(90deg, #f472b6, #facc15, #38bdf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+</style>

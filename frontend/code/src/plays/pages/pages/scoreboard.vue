@@ -1,131 +1,175 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 
-import { Status } from '@/base/basestore'
 import useTeamStore from '@/teams/store'
 import { useHostQuestionStore } from "@/plays/hoststore"
-
-import editTeamForm from '@/teams/widgets/editTeam.vue'
-import deleteTeamForm from '@/teams/widgets/deleteTeam.vue'
+import { teamColor } from '@/plays/teamColors'
 
 const props = defineProps(['playId'])
 const questionStore = useHostQuestionStore(props.playId)()
 const teamStore = useTeamStore(props.playId)()
-
-const isLoading = computed(() => [Status.BeforeLoad, Status.Loading].indexOf(teamStore.status) != -1)
-
-const columns = [
-  { label: 'Name', key: 'name' },
-  { label: 'Podpowiedzi', key: 'hinst' },
-  { label: 'Posiadane', key: 'money' },
-  // { label: 'Zalicytowane', key: 'auctioned' },
-]
-
-const teams = computed(() => teamStore.items)
 
 onMounted(async () => {
   await teamStore.fetch()
   await questionStore.fetch()
 })
 
-const adminScoresAddon = ref(0)
-const adminScoresAuctioned = computed(() => {
-  let sum = 0
-  sum += parseInt(adminScoresAddon.value) || 0
-  for (const [key, rawValue] of Object.entries(questionStore.auctionedPool)) {
-    sum += parseInt(rawValue) || 0
-  }
-  return sum
-});
-
-const isGreatest = (id) => {
-  let greatestId = null
-  let greatestValue = 0
-  for (const [key, rawValue] of Object.entries(questionStore.auctionedPool)) {
-    const value = parseInt(rawValue) || 0
-    if(value > greatestValue) {
-      greatestValue = value
-      greatestId = key
-    }
-  }
-  return greatestId == id
+const getMoney = (teamId) => {
+  return questionStore.moneyPool[teamId] || 0
 }
 
-const getMoney = (team_id) => {
-  return questionStore.moneyPool[team_id] || 0
+const getHints = (teamId) => {
+  return questionStore.hints[teamId] || 0
 }
 
-const getAuctioned = (team_id) => {
-  return questionStore.auctionedPool[team_id] || 0
-}
+// Teams ordered from the richest; the color stays tied to the team.
+const rankedTeams = computed(() => {
+  return teamStore.items
+    .map((team) => ({
+      id: team.id,
+      name: team.name,
+      money: getMoney(team.id),
+      hints: getHints(team.id),
+      color: teamColor(teamStore.items, team.id),
+    }))
+    .sort((a, b) => b.money - a.money)
+})
 
-const getAddon = (team_id) => {
-  return questionStore.addonPool[team_id] || 0
-}
-
-const getHints = (team_id) => {
-  return questionStore.hints[team_id] || 0
-}
+const formatMoney = (value) => value.toLocaleString('pl-PL')
 
 </script>
 
 <template>
-  <div class="h-full w-full flex flex-col">
-    <div>Kategoria: MOTORYZACJA</div>
-    <VaDataTable
-      class="flex-1 overflow-auto"
-      :columns="columns"
-      :items="teams"
-      :loading="isLoading"
-    >
-      <template #cell(name)="{ rowData }">
-        <div class="flex items-center gap-2 max-w-[230px] ellipsis">
-          {{ rowData.name }}
-        </div>
-      </template>
+  <div class="screen">
+    <header class="top">
+      <div class="pool">
+        <span class="caption">Pula</span>
+        <span class="pool-value">{{ formatMoney(getMoney("money_pool")) }}</span>
+      </div>
+    </header>
 
-      <template #cell(money)="{ rowData }">
-        <div class="flex gap-2 justify-center">
-          {{ getMoney(rowData.id) }}
-        </div>
-      </template>
-
-      <template #cell(auctioned)="{ rowData }">
-        <div class="flex gap-2 justify-end">
-          {{ getAuctioned(rowData.id) }}
-        </div>
-      </template>
-
-      <template #cell(hinst)="{ rowData }">
-        {{ getHints(rowData.id) }}
-      </template>
-
-      <template #headerPrepend>
-        <tr class="table-crud__slot">
-          <th class="p-1 min-w-[150px]">
-            Pula
-          </th>
-          <th class="p-1 min-w-[150px]">
-            -
-          </th>
-          <th class="p-1 min-w-[150px] justify-center">
-            {{ getMoney("money_pool") }}
-          </th>
-          <!-- <th class="p-1 min-w-[150px]">
-            {{ adminScoresAuctioned }}
-          </th> -->
-        </tr>
-      </template>
-
-    </VaDataTable>
-
+    <main class="teams">
+      <div
+        v-for="(team, index) in rankedTeams"
+        :key="team.id"
+        class="team"
+        :style="{ '--team-color': team.color }"
+      >
+        <span class="place">{{ index + 1 }}</span>
+        <span class="name">{{ team.name }}</span>
+        <span class="stat hints">
+          <span class="caption">Podpowiedzi</span>
+          <span class="value">{{ team.hints }}</span>
+        </span>
+        <span class="stat money">
+          <span class="caption">Posiadane</span>
+          <span class="value">{{ formatMoney(team.money) }}</span>
+        </span>
+      </div>
+    </main>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.va-data-table {
-  ::v-deep(.va-data-table__table-tr) {
-    border-bottom: 1px solid var(--va-background-border);
-  }
+<style scoped>
+.screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  padding: 3vh 4vw;
+  box-sizing: border-box;
+}
+
+.caption {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.2vw, 1.3rem);
+  opacity: 0.85;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2vw;
+}
+
+.pool {
+  display: flex;
+  align-items: baseline;
+  gap: 2vw;
+  padding: 1.25vh 3vw;
+  border-radius: 1.75rem;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #1e1b4b;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.pool-value {
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4vw, 4.25rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.teams {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2vh;
+}
+
+.team {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2vw;
+  padding: 2vh 2.5vw;
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 1rem solid var(--team-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.place {
+  flex: none;
+  width: clamp(2.5rem, 5vw, 5rem);
+  height: clamp(2.5rem, 5vw, 5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--team-color);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+.name {
+  flex: 1 1 12rem;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3.5vw, 3.75rem);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5vh;
+}
+.stat .caption {
+  line-height: 1.2;
+}
+.stat .value {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.hints .value {
+  font-size: clamp(1.25rem, 2.5vw, 2.75rem);
+}
+.money .value {
+  font-size: clamp(1.5rem, 3.5vw, 3.75rem);
+  color: #facc15;
 }
 </style>
