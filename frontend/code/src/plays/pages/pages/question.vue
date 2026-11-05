@@ -33,13 +33,13 @@
 </script>
 
 <template>
-  <VaCard v-if="!isLoading && questionStore.question">
+  <VaCard v-if="!isLoading && questionStore.question" class="h-full w-full">
     <VaCardContent>
       <Timer :playId="props.playId" />
       <div class="">
         <span class="bold">Odpowiada:</span> {{ teamName }}
       </div>
-      <div class="">
+      <div class="question">
         <span class="bold">Pytanie:</span> {{ questionStore.question.question }}
       </div>
       <div class="" v-if="isAnswerVisible">

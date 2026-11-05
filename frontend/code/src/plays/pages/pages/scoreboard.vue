@@ -70,9 +70,10 @@ const getHints = (team_id) => {
 </script>
 
 <template>
-  <div>
+  <div class="h-full w-full flex flex-col">
     <div>Kategoria: MOTORYZACJA</div>
     <VaDataTable
+      class="flex-1 overflow-auto"
       :columns="columns"
       :items="teams"
       :loading="isLoading"

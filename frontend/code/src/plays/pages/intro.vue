@@ -19,7 +19,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="h-full w-full">
     <PleyEvents />
     <QuestionModal
       v-if="viewStore.payload.name == 'question'"
