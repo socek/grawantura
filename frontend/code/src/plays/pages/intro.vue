@@ -2,7 +2,6 @@
   import { onMounted } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import PleyEvents from '@/events/play_event.vue'
   import { useHostViewStore } from "@/plays/hoststore"
 
   import QuestionModal from '@/plays/pages/pages/question.vue'
@@ -20,7 +19,6 @@
 
 <template>
   <div class="h-full w-full">
-    <PleyEvents />
     <QuestionModal
       v-if="viewStore.payload.name == 'question'"
       :playId="route.params.playId"

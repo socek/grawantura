@@ -53,6 +53,13 @@ async def stop(request: Request) -> dict:
     play_id = validate_play_id(request, user_id)
 
     commands.stop_timer(play_id)
+    add_event(
+        {
+            "type": "refresh",
+            "group": "timer",
+            "play_id": play_id,
+        }
+    )
 
     return {
         "status": "ok",
