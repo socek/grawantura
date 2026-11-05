@@ -21,7 +21,10 @@
         <VaCardContent>
           <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
             <createTeamForm :playId="playId" :key="playId" />
-            <StartGame :playId="playId" :key="playId" />
+            <div class="flex gap-2">
+              <VaButton :to="{ name: 'intro', params: { playId } }">Play</VaButton>
+              <StartGame :playId="playId" :key="playId" />
+            </div>
           </div>
           <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
             <TeamTable :playId="playId" />
