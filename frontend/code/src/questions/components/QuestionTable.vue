@@ -19,6 +19,7 @@ const isLoading = computed(() => {
 })
 
 const columns = [
+  { label: 'Category', key: 'category', sortable: true },
   { label: 'Question', key: 'question', sortable: true },
   { label: 'Answer', key: 'answer', sortable: true },
   { label: ' ', key: 'actions', align: 'right' },

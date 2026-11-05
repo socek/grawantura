@@ -14,6 +14,7 @@
     question: '',
     answer: '',
     hints: '',
+    category: '',
   }
 
   const newQuestion = ref({ ...defaultNewQuestion })
@@ -61,6 +62,14 @@
       <h1 class="va-h5">Create Question</h1>
       <VaForm v-slot="{ isValid }" ref="create-question-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
         <div class="self-stretch flex-col justify-start items-start gap-4 flex">
+          <div class="flex gap-4 flex-col sm:flex-row w-full">
+            <VaInput
+              v-model="newQuestion.category"
+              label="Category"
+              class="w-full"
+              name="category"
+            />
+          </div>
           <div class="flex gap-4 flex-col sm:flex-row w-full">
             <VaInput
               v-model="newQuestion.question"

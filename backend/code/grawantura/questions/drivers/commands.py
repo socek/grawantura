@@ -17,6 +17,7 @@ def create_question(
     answer: str,
     hints: str,
     game_id: UUID,
+    category: Optional[str] = None,
     question_id: UUID = None,
     now: datetime = None,
     db: Session = None,
@@ -29,6 +30,7 @@ def create_question(
         "question": question,
         "answer": answer,
         "hints": hints,
+        "category": category,
         "game_id": game_id,
         "created_at": now,
         "updated_at": now,
@@ -43,6 +45,7 @@ def update_question(
     question: Optional[str] = None,
     answer: Optional[str] = None,
     hints: Optional[str] = None,
+    category: Optional[str] = None,
     game_id: Optional[UUID] = None,
     now: Optional[datetime] = None,
     db: Optional[Session] = None,
@@ -52,6 +55,7 @@ def update_question(
         "question": question,
         "answer": answer,
         "hints": hints,
+        "category": category,
         "game_id": game_id,
     }
     filtered = {k: v for k, v in row.items() if v is not None}

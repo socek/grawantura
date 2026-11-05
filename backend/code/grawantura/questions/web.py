@@ -30,6 +30,7 @@ async def create_question(request):
         question=payload["question"],
         answer=payload["answer"],
         hints=payload["hints"],
+        category=payload.get("category"),
         game_id=game_id,
     )
     add_event(
@@ -55,6 +56,7 @@ async def update_question(request: Request) -> dict:
         question=payload["question"],
         answer=payload["answer"],
         hints=payload["hints"],
+        category=payload.get("category"),
     )
     add_event(
         {

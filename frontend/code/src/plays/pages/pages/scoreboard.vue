@@ -48,6 +48,8 @@ const highestBid = computed(() => Math.max(0, ...rankedTeams.value.map((team) =>
 
 const formatMoney = (value) => value.toLocaleString('pl-PL')
 
+const category = computed(() => questionStore.question?.category || '')
+
 </script>
 
 <template>
@@ -56,6 +58,10 @@ const formatMoney = (value) => value.toLocaleString('pl-PL')
       <div class="pool">
         <span class="caption">Pula</span>
         <span class="pool-value">{{ formatMoney(getMoney("money_pool")) }}</span>
+      </div>
+      <div class="category" v-if="category">
+        <span class="caption">Kategoria</span>
+        <span class="category-name">{{ category }}</span>
       </div>
     </header>
 
@@ -128,6 +134,22 @@ const formatMoney = (value) => value.toLocaleString('pl-PL')
   font-weight: 800;
   font-size: clamp(1.75rem, 4vw, 4.25rem);
   font-variant-numeric: tabular-nums;
+}
+
+/* Same size as the pool panel next to it. */
+.category {
+  display: flex;
+  align-items: baseline;
+  gap: 2vw;
+  padding: 1.25vh 3vw;
+  border-radius: 1.75rem;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.category-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.75rem, 4vw, 4.25rem);
 }
 
 .teams {

@@ -44,6 +44,7 @@
         "question": questionData.value.question,
         "answer": questionData.value.answer,
         "hints": questionData.value.hints,
+        "category": questionData.value.category || "",
       })
       isVisible.value = false
     }
@@ -75,6 +76,14 @@
       <h1 class="va-h5">Edit Question</h1>
       <VaForm v-slot="{ isValid }" ref="edit-question-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
         <div class="self-stretch flex-col justify-start items-start gap-4 flex">
+          <div class="flex gap-4 flex-col sm:flex-row w-full">
+            <VaInput
+              v-model="questionData.category"
+              label="Category"
+              class="w-full"
+              name="category"
+            />
+          </div>
           <div class="flex gap-4 flex-col sm:flex-row w-full">
             <VaInput
               v-model="questionData.question"

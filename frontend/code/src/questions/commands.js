@@ -14,6 +14,7 @@ const createQuestion = async (row) => {
         "question": row.question,
         "answer": row.answer,
         "hints": row.hints,
+        "category": row.category,
       }
     })
   } catch(error) {
@@ -41,6 +42,7 @@ const editQuestion = async (row) => {
         "question": row.question,
         "answer": row.answer,
         "hints": row.hints,
+        "category": row.category,
       },
     })
   } catch(error) {

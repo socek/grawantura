@@ -12,5 +12,6 @@ class QuestionTable(SqlTable):
     question = Column(String, nullable=True)
     answer = Column(String, nullable=True)
     hints = Column(String, nullable=True)
+    category = Column(String, nullable=True)
     game_id = Column(UUID(as_uuid=True), nullable=True, index=True)
     is_deleted = Column(Boolean, nullable=True)
