@@ -66,8 +66,26 @@ const getAddon = (team_id) => {
   return questionStore.addonPool[team_id] || 0
 }
 
+let sendBidsTimeout = null
+
+// Send bids to the game screen 250 ms after the last change.
+const scheduleSendBids = () => {
+  clearTimeout(sendBidsTimeout)
+  sendBidsTimeout = setTimeout(() => {
+    const bids = {}
+    for (const [key, rawValue] of Object.entries(questionStore.auctionedPool)) {
+      if(key == "money_pool") {
+        continue
+      }
+      bids[key] = parseInt(rawValue) || 0
+    }
+    commands.sendBids(props.playId, bids)
+  }, 250)
+}
+
 const setAuctioned = (team_id, newValue) => {
   questionStore.auctionedPool[team_id] = parseInt(newValue)
+  scheduleSendBids()
 }
 
 const setAddon =  (team_id, newValue) => {

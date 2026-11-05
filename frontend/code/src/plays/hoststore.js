@@ -20,6 +20,21 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
   const events = ref([])
   const gameId = ref(null)
 
+  // Bids saved by "end auction" for the current question (empty until the
+  // auction ends). Live bids during an auction are kept in auctionedPool.
+  const finalBids = computed(() => {
+    let result = {}
+    for (const event of events.value || []) {
+      if (event.typename == "question draw") {
+        result = {}
+      } else if (event.typename == "end auction") {
+        result = { ...event.payload }
+        delete result["addon"]
+      }
+    }
+    return result
+  })
+
   async function fetch(force) {
     force = force || false
     if (!force && status.value != Status.BeforeLoad) {
@@ -82,6 +97,7 @@ export const useHostQuestionStore = (playId) => defineStore("question_" + playId
     answerStatus,
     events,
     gameId,
+    finalBids,
   }
 })
 

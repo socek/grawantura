@@ -7,6 +7,7 @@
   import useTeamStore from '@/teams/store'
   import useTimerStore from '@/timer/store'
   import { useHostQuestionStore, useHostViewStore } from "@/plays/hoststore"
+  import clientId from '@/plays/clientId'
 
   const gamesStore = useGamesStore()
 
@@ -56,6 +57,14 @@
       if(host_action_reload_actions.includes(payload["name"])) {
         const playId = payload["play_id"]
         await useHostQuestionStore(playId)().fetch(true)
+      } else if(payload["name"] == "bids") {
+        // Skip our own bids so they don't overwrite what the host is typing.
+        if(payload["client_id"] != clientId) {
+          const questionStore = useHostQuestionStore(payload["play_id"])()
+          for (const [teamId, value] of Object.entries(payload["bids"])) {
+            questionStore.auctionedPool[teamId] = value
+          }
+        }
       } else if(payload["name"] == "change_view") {
         const playId = payload["play_id"]
         await useHostViewStore(playId)().fetch(true)

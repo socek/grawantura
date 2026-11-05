@@ -22,6 +22,14 @@ const getHints = (teamId) => {
   return questionStore.hints[teamId] || 0
 }
 
+// After the auction ends show the saved bids; during it, the live ones.
+const isAuctionFinished = computed(() => Object.keys(questionStore.finalBids).length > 0)
+
+const getAuctioned = (teamId) => {
+  const bids = isAuctionFinished.value ? questionStore.finalBids : questionStore.auctionedPool
+  return parseInt(bids[teamId]) || 0
+}
+
 // Teams ordered from the richest; the color stays tied to the team.
 const rankedTeams = computed(() => {
   return teamStore.items
@@ -30,10 +38,13 @@ const rankedTeams = computed(() => {
       name: team.name,
       money: getMoney(team.id),
       hints: getHints(team.id),
+      auctioned: getAuctioned(team.id),
       color: teamColor(teamStore.items, team.id),
     }))
     .sort((a, b) => b.money - a.money)
 })
+
+const highestBid = computed(() => Math.max(0, ...rankedTeams.value.map((team) => team.auctioned)))
 
 const formatMoney = (value) => value.toLocaleString('pl-PL')
 
@@ -60,6 +71,13 @@ const formatMoney = (value) => value.toLocaleString('pl-PL')
         <span class="stat hints">
           <span class="caption">Podpowiedzi</span>
           <span class="value">{{ team.hints }}</span>
+        </span>
+        <span
+          class="stat auctioned"
+          :class="{ leading: team.auctioned > 0 && team.auctioned == highestBid }"
+        >
+          <span class="caption">Zlicytowane</span>
+          <span class="value">{{ formatMoney(team.auctioned) }}</span>
         </span>
         <span class="stat money">
           <span class="caption">Posiadane</span>
@@ -167,6 +185,17 @@ const formatMoney = (value) => value.toLocaleString('pl-PL')
 }
 .hints .value {
   font-size: clamp(1.25rem, 2.5vw, 2.75rem);
+}
+.auctioned {
+  min-width: 10vw;
+  padding: 0.5vh 1vw;
+  border-radius: 1rem;
+}
+.auctioned .value {
+  font-size: clamp(1.5rem, 3.5vw, 3.75rem);
+}
+.auctioned.leading {
+  background: var(--team-color);
 }
 .money .value {
   font-size: clamp(1.5rem, 3.5vw, 3.75rem);

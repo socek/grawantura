@@ -141,6 +141,32 @@ async def end_auction(request: Request) -> dict:
 
 
 @WebEndpoint
+async def bids(request: Request) -> dict:
+    """
+    Broadcast the bids the host is typing in during an auction, so the game
+    screen can show them live. Bids are not stored; the final amounts are
+    saved by end_auction.
+    """
+    user_id = validate_user_id(request)
+    play_id = validate_play_id(request, user_id)
+
+    payload = await request.json()
+    add_event(
+        {
+            "type": "host_action",
+            "name": "bids",
+            "play_id": play_id,
+            "bids": payload["bids"],
+            "client_id": payload.get("client_id"),
+        }
+    )
+
+    return {
+        "status": "ok",
+    }
+
+
+@WebEndpoint
 async def hint(request: Request) -> dict:
     user_id = validate_user_id(request)
     play_id = validate_play_id(request, user_id)
@@ -208,6 +234,7 @@ def get_routes(prefix: str) -> Generator[Route]:
     yield Route(f"{prefix}/change_view", change_view, methods=["POST"])
     yield Route(f"{prefix}/start", start, methods=["POST"])
     yield Route(f"{prefix}/end_auction", end_auction, methods=["POST"])
+    yield Route(f"{prefix}/bids", bids, methods=["POST"])
     yield Route(f"{prefix}/hint", hint, methods=["POST"])
     yield Route(f"{prefix}/answer", answer, methods=["POST"])
 

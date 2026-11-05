@@ -1,6 +1,7 @@
 import colors from '@/base/colors'
-import { jwtCallWithErrorHandling } from "@/auth/calls"
+import jwtCall, { jwtCallWithErrorHandling } from "@/auth/calls"
 import { playsUrl, hostUrl } from '@/base/urls'
+import clientId from '@/plays/clientId'
 
 export const createPlay = async (row) => {
   return await jwtCallWithErrorHandling(
@@ -126,6 +127,18 @@ export const endAuction = async (playId, money) => {
   )
 }
 
+// Sent on every bid change, so it shows no notifications.
+export const sendBids = async (playId, bids) => {
+  return await jwtCall({
+    "url": hostUrl(playId, "bids"),
+    "method": "POST",
+    "data": {
+      "bids": bids,
+      "client_id": clientId,
+    }
+  })
+}
+
 export const addHint = async (playId, change, money) => {
   return await jwtCallWithErrorHandling(
     {
@@ -202,6 +215,7 @@ export default {
   changeView,
   startGame,
   endAuction,
+  sendBids,
   addHint,
   useHint,
   answer,
