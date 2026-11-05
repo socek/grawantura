@@ -31,6 +31,13 @@
     return null
   })
 
+  const category = computed(() => questionStore.question?.category || '')
+
+  // Hints the answering team still has.
+  const answeringTeamHints = computed(() => {
+    return questionStore.hints[questionStore.answeringTeamId] || 0
+  })
+
   const answeringTeamColor = computed(() => {
     return teamColor(teamStore.items, questionStore.answeringTeamId)
   })
@@ -40,12 +47,19 @@
 <template>
   <div v-if="!isLoading && questionStore.question" class="screen">
     <header class="top-bar">
-      <div class="team-badge" v-if="answeringTeam" :style="{ background: answeringTeamColor }">
-        <span class="label">Odpowiada</span>
-        <span class="name">{{ answeringTeam.name }}</span>
-      </div>
-      <div class="team-badge waiting" v-else>
-        <span class="label">Licytacja</span>
+      <div class="badges">
+        <div class="team-badge category" v-if="category">
+          <span class="label">Kategoria</span>
+          <span class="name">{{ category }}</span>
+        </div>
+        <div class="team-badge" :style="{ background: answeringTeamColor }">
+          <span class="label">Podpowiedzi</span>
+          <span class="name">{{ answeringTeamHints }}</span>
+        </div>
+        <div class="team-badge" v-if="answeringTeam" :style="{ background: answeringTeamColor }">
+          <span class="label">Odpowiada</span>
+          <span class="name">{{ answeringTeam.name }}</span>
+        </div>
       </div>
       <PlayTimer :playId="props.playId" />
     </header>
@@ -94,31 +108,41 @@
   .top-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 2vw;
+    gap: 1vw;
     align-items: stretch;
     justify-content: space-between;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
   }
 
   .team-badge {
     display: flex;
     align-items: baseline;
-    gap: 1.5vw;
-    padding: 1.5vh 2.5vw;
-    border-radius: 1.5rem;
+    gap: 1vw;
+    padding: 1vh 1.5vw;
+    border-radius: 1.25rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   }
-  .team-badge.waiting {
-    background: rgba(255, 255, 255, 0.12);
+  /* Same colors as the category panel on the scoreboard. */
+  .team-badge.category {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  }
+  .team-badge.category .name {
+    text-transform: uppercase;
   }
   .team-badge .label {
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     font-weight: 700;
-    font-size: clamp(0.9rem, 1.4vw, 1.4rem);
+    font-size: clamp(0.7rem, 1vw, 1.1rem);
   }
   .team-badge .name {
     font-weight: 800;
-    font-size: clamp(1.5rem, 3.5vw, 3.5rem);
+    font-size: clamp(1.1rem, 2.4vw, 2.5rem);
   }
 
   .question-area {

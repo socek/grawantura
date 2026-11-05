@@ -60,13 +60,13 @@
     position: relative;
     overflow: hidden;
     height: 100%;
-    min-width: 18vw;
+    min-width: 12vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1vh 2vw;
+    padding: 1vh 1.5vw;
     box-sizing: border-box;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     background: rgba(255, 255, 255, 0.12);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     transition: opacity 0.3s, background 0.3s;
@@ -91,13 +91,13 @@
 
   .time {
     font-weight: 800;
-    font-size: clamp(1.5rem, 3.5vw, 3.5rem);
+    font-size: clamp(1.1rem, 2.4vw, 2.5rem);
     font-variant-numeric: tabular-nums;
     line-height: 1.1;
   }
 
   .icon {
-    font-size: clamp(1.5rem, 3.5vw, 3.5rem);
+    font-size: clamp(1.1rem, 2.4vw, 2.5rem);
   }
 
   .stopped {
