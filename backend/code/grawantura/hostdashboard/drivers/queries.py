@@ -153,7 +153,11 @@ def play_events(
             PlayEventTable.typename,
             PlayEventTable.payload,
             PlayEventTable.created_at,
+            # The game screen shows the history without access to the
+            # (login-only) question list, so include the question text here.
+            QuestionTable.question.label("question_text"),
         )
+        .outerjoin(QuestionTable, QuestionTable.id == PlayEventTable.question_id)
         .filter(
             PlayEventTable.play_id == play_id,
             PlayEventTable.is_deleted.isnot(True),
